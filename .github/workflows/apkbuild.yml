@@ -27,14 +27,43 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '18'
+        cache: 'npm'
         
     - name: Install Cordova
       run: |
         npm install -g cordova@12.0.0
         cordova --version
         
-    - name: Create and build Cordova project
+    - name: Install project dependencies
+      run: npm install
+        
+    - name: Add Android platform
       run: |
+        cordova platform add android@12.0.0
+        
+    - name: Add Cordova plugins
+      run: |
+        cordova plugin add cordova-plugin-file
+        cordova plugin add cordova-plugin-local-notification
+        cordova plugin add cordova-plugin-background-mode
+        cordova plugin add cordova-plugin-device
+        cordova plugin add cordova-plugin-network-information
+        
+    - name: Build Android APK
+      run: |
+        cordova build android --debug
+        
+    - name: Upload APK artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: quantum-trader-pro-apk
+        path: platforms/android/app/build/outputs/apk/debug/app-debug.apk
+        retention-days: 30
+        
+    - name: Show build success
+      run: |
+        echo "✅ APK built successfully!"
+        echo "📱 Download from GitHub Actions Artifacts"      run: |
         # Create fresh Cordova project
         cordova create build com.quantumtrader.pro "Quantum Trader Pro"
         cd build
