@@ -1,59 +1,32 @@
-name: Build APK - Simple
-
-on:
-  push:
-    branches: [ main ]
+name: Convert build files to APK and upload to Github Artifacts
+on: push
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+    strategy:
+      matrix:
+        node-version: [16.x]
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    - name: Setup Environment
-      run: |
-        # Setup Java
-        sudo apt update
-        sudo apt install -y openjdk-17-jdk
-        
-        # Setup Node.js
-        curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-        sudo apt install -y nodejs
-        
-    - name: Install Cordova
-      run: |
-        npm install -g cordova@12.0.0
-        
-    - name: Setup Android SDK
-      run: |
-        # Download Android Command Line Tools
-        wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
-        unzip -q commandlinetools-linux-9477386_latest.zip
-        mkdir -p android-sdk/cmdline-tools/latest
-        mv cmdline-tools/* android-sdk/cmdline-tools/latest/
-        export ANDROID_SDK_ROOT=$PWD/android-sdk
-        export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin
-        
-        # Accept licenses dan install packages
-        yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses
-        $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.0"
-        
-    - name: Initialize Cordova Project
-      run: |
-        # Initialize Cordova di current directory
-        cordova create . com.quantumtrader.pro "Quantum Trader Pro" || echo "Project might already exist"
-        
-    - name: Build APK
-      run: |
-        cordova platform add android@12.0.0
-        cordova plugin add cordova-plugin-file
-        cordova plugin add cordova-plugin-local-notification
-        cordova build android --debug
-        
-    - name: Upload APK
-      uses: actions/upload-artifact@v4
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
       with:
-        name: quantum-trader-apk
-        path: platforms/android/app/build/outputs/apk/debug/app-debug.apk
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+     
+    - run: npm install
+    - run: npm run build
+ 
+    - uses: darkshredder/web-to-app-action@main
+      with:
+          build-folder-path: "build" # Defaults to build, It is the folder where build files or html are stored
+          app-name: "Your-App-Name" # Defaults to MyApp
+          output-folder-path: "my-apks" # Defaults to apk/, Where final APK files are created
+    
+    - name: 'Upload Artifact'
+      uses: actions/upload-artifact@v2
+      with:
+        name: Final-apks
+        path: my-apks/ # Should be same as "output-folder-path"
