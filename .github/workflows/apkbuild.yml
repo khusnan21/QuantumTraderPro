@@ -1,0 +1,78 @@
+name: Build Android APK - Modern
+
+on:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Java 17
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+        
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+      with:
+        api-level: 33
+        build-tools: 33.0.0
+        ndk: r25c
+        cmake: 3.22.1
+        
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: |
+        npm install -g cordova@12.0.0
+        npm install -g gradle
+        
+    - name: Create Cordova project structure
+      run: |
+        # Create fresh project
+        cordova create build com.quantumtrader.pro "Quantum Trader Pro"
+        cd build
+        
+        # Copy your HTML file
+        cp ../index.html www/index.html
+        
+        # Add Android platform
+        cordova platform add android@12.0.0
+        
+        # Add plugins
+        cordova plugin add cordova-plugin-file
+        cordova plugin add cordova-plugin-local-notification
+        cordova plugin add cordova-plugin-background-mode
+        cordova plugin add cordova-plugin-device
+        cordova plugin add cordova-plugin-network-information
+        
+        # Fix Gradle compatibility
+        echo "android.useAndroidX=true" >> platforms/android/gradle.properties
+        echo "android.enableJetifier=true" >> platforms/android/gradle.properties
+        
+    - name: Build with Gradle Wrapper
+      run: |
+        cd build
+        ./platforms/android/gradlew build -p platforms/android
+        
+    - name: Find and upload APK
+      run: |
+        find build/platforms/android -name "*.apk" -type f | head -5
+      continue-on-error: true
+      
+    - name: Upload APK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: quantum-trader-pro
+        path: build/platforms/android/app/build/outputs/apk/**/*.apk
+        retention-days: 30

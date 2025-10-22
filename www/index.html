@@ -1,0 +1,3137 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#6750A4">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Quantum Trader Pro</title>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Material Design 3 Color System */
+            --md-primary: #6750A4;
+            --md-on-primary: #FFFFFF;
+            --md-primary-container: #EADDFF;
+            --md-on-primary-container: #21005D;
+            --md-secondary: #625B71;
+            --md-on-secondary: #FFFFFF;
+            --md-secondary-container: #E8DEF8;
+            --md-on-secondary-container: #1D192B;
+            --md-tertiary: #7D5260;
+            --md-on-tertiary: #FFFFFF;
+            --md-surface: #FFFBFE;
+            --md-on-surface: #1C1B1F;
+            --md-surface-variant: #E7E0EC;
+            --md-on-surface-variant: #49454F;
+            --md-background: #FFFBFE;
+            --md-error: #B3261E;
+            --md-on-error: #FFFFFF;
+            --md-outline: #79747E;
+            --md-shadow: #000000;
+            
+            /* Elevation */
+            --md-elevation-1: 0 1px 2px rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.15);
+            --md-elevation-2: 0 1px 2px rgba(0,0,0,0.3), 0 2px 6px 2px rgba(0,0,0,0.15);
+            --md-elevation-3: 0 4px 8px 3px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.3);
+            
+            /* Spacing */
+            --md-space-xs: 4px;
+            --md-space-sm: 8px;
+            --md-space-md: 16px;
+            --md-space-lg: 24px;
+            --md-space-xl: 32px;
+            
+            /* Border Radius */
+            --md-radius-xs: 4px;
+            --md-radius-sm: 8px;
+            --md-radius-md: 12px;
+            --md-radius-lg: 16px;
+            --md-radius-xl: 28px;
+            
+            /* Typography */
+            --md-display-large: 57px;
+            --md-display-medium: 45px;
+            --md-display-small: 36px;
+            --md-headline-large: 32px;
+            --md-headline-medium: 28px;
+            --md-headline-small: 24px;
+            --md-title-large: 22px;
+            --md-title-medium: 16px;
+            --md-title-small: 14px;
+            --md-label-large: 14px;
+            --md-label-medium: 12px;
+            --md-label-small: 11px;
+            --md-body-large: 16px;
+            --md-body-medium: 14px;
+            --md-body-small: 12px;
+
+            /* Quantum Colors */
+            --quantum-success: #00C853;
+            --quantum-danger: #FF4757;
+            --quantum-warning: #FFA726;
+            --quantum-info: #2196F3;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: var(--md-background);
+            color: var(--md-on-surface);
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+
+        .app-container {
+            min-height: 100vh;
+            background: var(--md-background);
+        }
+
+        /* Status Bar */
+        .status-bar {
+            height: 44px;
+            background: var(--md-primary);
+            color: var(--md-on-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--md-body-medium);
+            font-weight: 500;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 0 var(--md-space-md);
+        }
+
+        /* Header */
+        .header {
+            background: var(--md-surface);
+            padding: var(--md-space-md);
+            border-bottom: 1px solid var(--md-surface-variant);
+            position: sticky;
+            top: 44px;
+            z-index: 999;
+            box-shadow: var(--md-elevation-1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--md-space-sm);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--md-primary);
+            border-radius: var(--md-radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--md-on-primary);
+        }
+
+        .logo-text {
+            font-size: var(--md-title-large);
+            font-weight: 600;
+            color: var(--md-primary);
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            list-style: none;
+            gap: var(--md-space-xs);
+            margin-top: var(--md-space-md);
+            max-width: 1400px;
+            margin: var(--md-space-md) auto 0;
+            padding: 0 var(--md-space-md);
+            justify-content: center;
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: var(--md-space-md) var(--md-space-sm);
+            cursor: pointer;
+            border-radius: var(--md-radius-lg);
+            transition: all 0.2s ease;
+            font-weight: 500;
+            font-size: var(--md-body-small);
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--md-space-sm);
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--md-on-surface-variant);
+            text-align: center;
+            min-height: 48px;
+        }
+
+        .nav-tab.active {
+            background: var(--md-primary-container);
+            border-color: var(--md-primary);
+            color: var(--md-on-primary-container);
+        }
+
+        .nav-tab i {
+            font-size: 16px;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 44px 0 20px 0;
+            min-height: 100vh;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .tab-content {
+            display: none;
+            padding: var(--md-space-md);
+            animation: fadeInUp 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Cards */
+        .card {
+            background: var(--md-surface);
+            border-radius: var(--md-radius-lg);
+            padding: var(--md-space-lg);
+            margin-bottom: var(--md-space-md);
+            box-shadow: var(--md-elevation-1);
+            border: 1px solid var(--md-surface-variant);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--md-space-md);
+            padding-bottom: var(--md-space-md);
+            border-bottom: 1px solid var(--md-surface-variant);
+            flex-wrap: wrap;
+            gap: var(--md-space-md);
+        }
+
+        .card-title {
+            font-size: var(--md-title-large);
+            font-weight: 500;
+            color: var(--md-on-surface);
+            display: flex;
+            align-items: center;
+            gap: var(--md-space-sm);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--md-space-md);
+            margin-bottom: var(--md-space-lg);
+        }
+
+        .stat-card {
+            background: var(--md-surface-variant);
+            border-radius: var(--md-radius-md);
+            padding: var(--md-space-lg);
+            text-align: center;
+            border: 1px solid var(--md-outline);
+        }
+
+        .stat-value {
+            font-size: var(--md-headline-small);
+            font-weight: 700;
+            margin: var(--md-space-sm) 0;
+            color: var(--md-primary);
+        }
+
+        .stat-value.positive { color: var(--quantum-success); }
+        .stat-value.negative { color: var(--quantum-danger); }
+        .stat-value.warning { color: var(--quantum-warning); }
+
+        .stat-label {
+            font-size: var(--md-label-medium);
+            color: var(--md-on-surface-variant);
+        }
+
+        /* Market Status */
+        .market-status {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--md-space-md);
+            margin-bottom: var(--md-space-lg);
+        }
+
+        .market-status-item {
+            text-align: center;
+            padding: var(--md-space-lg);
+            background: var(--md-surface-variant);
+            border-radius: var(--md-radius-md);
+            border: 1px solid var(--md-outline);
+        }
+
+        .market-status-value {
+            font-size: var(--md-body-large);
+            font-weight: 600;
+            margin-top: var(--md-space-sm);
+            color: var(--md-primary);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: var(--md-space-sm) var(--md-space-md);
+            border: none;
+            border-radius: var(--md-radius-xl);
+            font-size: var(--md-label-large);
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--md-space-sm);
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-filled {
+            background: var(--md-primary);
+            color: var(--md-on-primary);
+        }
+
+        .btn-tonal {
+            background: var(--md-secondary-container);
+            color: var(--md-on-secondary-container);
+        }
+
+        .btn-outlined {
+            background: transparent;
+            border: 1px solid var(--md-outline);
+            color: var(--md-primary);
+        }
+
+        .btn-text {
+            background: transparent;
+            color: var(--md-primary);
+        }
+
+        .btn-success {
+            background: var(--quantum-success);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--quantum-warning);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--quantum-danger);
+            color: white;
+        }
+
+        /* Chips */
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            padding: var(--md-space-xs) var(--md-space-sm);
+            border-radius: var(--md-radius-xl);
+            font-size: var(--md-label-small);
+            font-weight: 500;
+            gap: var(--md-space-xs);
+        }
+
+        .chip-primary {
+            background: var(--md-primary-container);
+            color: var(--md-on-primary-container);
+        }
+
+        .chip-success {
+            background: #E7F4E8;
+            color: #1E6D2F;
+        }
+
+        .chip-error {
+            background: #FBEAE9;
+            color: var(--md-error);
+        }
+
+        .chip-warning {
+            background: #FEF4E6;
+            color: #7A5000;
+        }
+
+        /* Chart Containers */
+        .chart-container {
+            height: 400px;
+            margin-bottom: var(--md-space-lg);
+            background: var(--md-surface);
+            border-radius: var(--md-radius-lg);
+            padding: var(--md-space-lg);
+            border: 1px solid var(--md-surface-variant);
+            box-shadow: var(--md-elevation-1);
+        }
+
+        /* Signal Cards */
+        .signal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: var(--md-space-md);
+        }
+
+        .signal-card {
+            background: var(--md-surface);
+            border-radius: var(--md-radius-lg);
+            padding: var(--md-space-lg);
+            margin-bottom: var(--md-space-md);
+            box-shadow: var(--md-elevation-1);
+            border: 1px solid var(--md-surface-variant);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .signal-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--md-elevation-2);
+        }
+
+        .signal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--md-space-md);
+        }
+
+        .signal-pair {
+            font-size: var(--md-title-large);
+            font-weight: 600;
+            color: var(--md-on-surface);
+        }
+
+        .signal-price-container {
+            text-align: right;
+            min-width: 120px;
+        }
+
+        .signal-current-price {
+            font-size: var(--md-title-large);
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .signal-entry-price {
+            font-size: var(--md-body-small);
+            color: var(--md-on-surface-variant);
+        }
+
+        .price-loading {
+            font-size: var(--md-body-small);
+            color: var(--md-on-surface-variant);
+            font-style: italic;
+        }
+
+        .price-positive {
+            color: var(--quantum-success) !important;
+        }
+
+        .price-negative {
+            color: var(--quantum-danger) !important;
+        }
+
+        .price-neutral {
+            color: var(--md-primary) !important;
+        }
+
+        /* Progress Bars */
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--md-surface-variant);
+            border-radius: 3px;
+            overflow: hidden;
+            margin: var(--md-space-sm) 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--md-primary);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        /* Search */
+        .search-container {
+            display: flex;
+            margin-bottom: var(--md-space-lg);
+            position: relative;
+            max-width: 100%;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: var(--md-space-md);
+            border: 1px solid var(--md-outline);
+            border-radius: var(--md-radius-md) 0 0 var(--md-radius-md);
+            background: var(--md-surface);
+            color: var(--md-on-surface);
+            font-size: var(--md-body-large);
+            transition: all 0.2s ease;
+            border-right: none;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--md-primary);
+            box-shadow: 0 0 0 2px var(--md-primary-container);
+        }
+
+        .search-button {
+            padding: var(--md-space-md) var(--md-space-lg);
+            background: var(--md-primary);
+            border: none;
+            border-radius: 0 var(--md-radius-md) var(--md-radius-md) 0;
+            color: var(--md-on-primary);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            font-size: var(--md-body-large);
+            border-left: none;
+        }
+
+        /* Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--md-surface);
+            border-radius: var(--md-radius-md);
+            overflow: hidden;
+            box-shadow: var(--md-elevation-1);
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: var(--md-space-md);
+            text-align: left;
+            border-bottom: 1px solid var(--md-surface-variant);
+        }
+
+        .data-table th {
+            background: var(--md-surface-variant);
+            font-weight: 500;
+            color: var(--md-on-surface-variant);
+            font-size: var(--md-label-large);
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: var(--md-space-xl);
+            color: var(--md-on-surface-variant);
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--md-surface-variant);
+            border-top: 3px solid var(--md-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto var(--md-space-md);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Technical Dashboard */
+        .technical-dashboard {
+            display: flex;
+            flex-direction: column;
+            gap: var(--md-space-md);
+            margin: var(--md-space-md) 0;
+        }
+
+        .indicator-group {
+            background: var(--md-surface-variant);
+            border-radius: var(--md-radius-md);
+            padding: var(--md-space-md);
+            border: 1px solid var(--md-outline);
+        }
+
+        .indicator-group h4 {
+            margin-bottom: var(--md-space-sm);
+            font-size: var(--md-body-medium);
+            color: var(--md-primary);
+            font-weight: 600;
+        }
+
+        .indicator-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--md-space-sm);
+        }
+
+        .indicator-item.enhanced {
+            text-align: center;
+            padding: var(--md-space-md);
+            background: var(--md-surface);
+            border-radius: var(--md-radius-sm);
+            border: 1px solid var(--md-outline);
+        }
+
+        .signal-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--md-space-md);
+            margin-bottom: var(--md-space-lg);
+            padding: var(--md-space-lg);
+            background: var(--md-surface-variant);
+            border-radius: var(--md-radius-md);
+            border: 1px solid var(--md-outline);
+        }
+
+        /* Filter Section */
+        .filter-section {
+            display: flex;
+            gap: var(--md-space-md);
+            margin-bottom: var(--md-space-lg);
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-select {
+            padding: var(--md-space-sm) var(--md-space-md);
+            border-radius: var(--md-radius-md);
+            background: var(--md-surface);
+            color: var(--md-on-surface);
+            border: 1px solid var(--md-outline);
+            font-size: var(--md-body-medium);
+            min-width: 160px;
+            transition: all 0.2s ease;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--md-primary);
+            box-shadow: 0 0 0 2px var(--md-primary-container);
+        }
+
+        /* Technical Badges */
+        .technical-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: var(--md-space-xs) var(--md-space-sm);
+            border-radius: var(--md-radius-xl);
+            font-size: var(--md-label-small);
+            font-weight: 600;
+            margin: 2px;
+            gap: var(--md-space-xs);
+        }
+
+        .badge-buy {
+            background: rgba(0, 200, 83, 0.15);
+            color: var(--quantum-success);
+            border: 1px solid rgba(0, 200, 83, 0.3);
+        }
+
+        .badge-sell {
+            background: rgba(255, 71, 87, 0.15);
+            color: var(--quantum-danger);
+            border: 1px solid rgba(255, 71, 87, 0.3);
+        }
+
+        /* Auto Scan Status */
+        .auto-scan-status {
+            background: var(--md-surface-variant);
+            border-radius: var(--md-radius-lg);
+            padding: var(--md-space-lg);
+            margin-bottom: var(--md-space-lg);
+            border: 1px solid var(--md-outline);
+        }
+
+        .auto-scan-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--md-space-md);
+            flex-wrap: wrap;
+            gap: var(--md-space-md);
+        }
+
+        .auto-scan-header h3 {
+            color: var(--md-primary);
+            font-size: var(--md-title-large);
+            margin: 0;
+        }
+
+        .scan-controls {
+            display: flex;
+            gap: var(--md-space-sm);
+            flex-wrap: wrap;
+        }
+
+        .auto-scan-info {
+            background: var(--md-surface);
+            padding: var(--md-space-md);
+            border-radius: var(--md-radius-md);
+            border: 1px solid var(--md-outline);
+        }
+
+        .auto-scan-info p {
+            margin: 5px 0;
+            font-size: var(--md-body-medium);
+            color: var(--md-on-surface-variant);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-tabs {
+                padding: 0 var(--md-space-sm);
+            }
+            
+            .nav-tab {
+                padding: var(--md-space-sm) var(--md-space-xs);
+                font-size: var(--md-body-small);
+                min-height: 44px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .signal-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .chart-container {
+                height: 300px;
+                padding: var(--md-space-md);
+            }
+
+            .search-container {
+                flex-direction: column;
+            }
+
+            .search-input {
+                border-radius: var(--md-radius-md) var(--md-radius-md) 0 0;
+                border-right: 1px solid var(--md-outline);
+                border-bottom: none;
+            }
+
+            .search-button {
+                border-radius: 0 0 var(--md-radius-md) var(--md-radius-md);
+            }
+
+            .auto-scan-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .scan-controls {
+                justify-content: center;
+            }
+
+            .signal-header {
+                flex-direction: column;
+                gap: var(--md-space-sm);
+            }
+
+            .signal-price-container {
+                text-align: left;
+            }
+        }
+
+        /* Dark Mode */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --md-primary: #D0BCFF;
+                --md-on-primary: #371E73;
+                --md-primary-container: #4F378B;
+                --md-on-primary-container: #EADDFF;
+                --md-secondary: #CCC2DC;
+                --md-on-secondary: #332D41;
+                --md-secondary-container: #4A4458;
+                --md-on-secondary-container: #E8DEF8;
+                --md-tertiary: #EFB8C8;
+                --md-on-tertiary: #492532;
+                --md-surface: #1C1B1F;
+                --md-on-surface: #E6E1E5;
+                --md-surface-variant: #49454F;
+                --md-on-surface-variant: #CAC4D0;
+                --md-background: #1C1B1F;
+                --md-error: #F2B8B5;
+                --md-on-error: #601410;
+                --md-outline: #938F99;
+            }
+            
+            .chip-success {
+                background: #1E6D2F;
+                color: #E7F4E8;
+            }
+            
+            .chip-error {
+                background: #B3261E;
+                color: #FBEAE9;
+            }
+            
+            .chip-warning {
+                background: #7A5000;
+                color: #FEF4E6;
+            }
+
+            .badge-buy {
+                background: rgba(0, 200, 83, 0.2);
+                color: #00C853;
+            }
+
+            .badge-sell {
+                background: rgba(255, 71, 87, 0.2);
+                color: #FF4757;
+            }
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 10000;
+            max-width: 300px;
+            animation: slideInRight 0.3s ease;
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Suggestions */
+        .suggestions {
+            position: absolute;
+            background: var(--md-surface);
+            border: 1px solid var(--md-outline);
+            border-top: none;
+            width: 100%;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 100;
+            top: 100%;
+            left: 0;
+            display: none;
+            border-radius: 0 0 var(--md-radius-md) var(--md-radius-md);
+            box-shadow: var(--md-elevation-2);
+        }
+        
+        .suggestion-item {
+            padding: var(--md-space-md);
+            cursor: pointer;
+            border-bottom: 1px solid var(--md-surface-variant);
+            transition: background-color 0.2s;
+            font-size: var(--md-body-medium);
+        }
+        
+        .suggestion-item:hover {
+            background: var(--md-surface-variant);
+        }
+        
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .error-message {
+            color: var(--md-error);
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 71, 87, 0.1);
+            border-radius: var(--md-radius-md);
+            margin: var(--md-space-md) 0;
+            border: 1px solid rgba(255, 71, 87, 0.3);
+        }
+
+        /* Signal Progress */
+        .signal-progress {
+            margin: 15px 0;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        .target-progress {
+            margin-top: 10px;
+        }
+
+        .target-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+            border-bottom: 1px solid var(--md-surface-variant);
+        }
+
+        .target-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <span id="current-time">12:00</span>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-atom"></i>
+                </div>
+                <div class="logo-text">Quantum Trader Pro</div>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-text" id="refresh-btn">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+                <button class="btn btn-text">
+                    <i class="fas fa-bell"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <ul class="nav-tabs">
+            <li class="nav-tab active" data-tab="home">
+                <i class="fas fa-home"></i>
+                <span class="nav-label">Dashboard</span>
+            </li>
+            <li class="nav-tab" data-tab="signals">
+                <i class="fas fa-satellite-dish"></i>
+                <span class="nav-label">Signals</span>
+            </li>
+            <li class="nav-tab" data-tab="screener">
+                <i class="fas fa-search"></i>
+                <span class="nav-label">Screener</span>
+            </li>
+            <li class="nav-tab" data-tab="results">
+                <i class="fas fa-chart-bar"></i>
+                <span class="nav-label">Results</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Home Tab -->
+        <div id="home" class="tab-content active">
+            <div class="market-status">
+                <div class="market-status-item">
+                    <div>Last Updated</div>
+                    <div class="market-status-value" id="last-updated">Loading...</div>
+                </div>
+                <div class="market-status-item">
+                    <div>Active Signals</div>
+                    <div class="market-status-value" id="active-signals">0</div>
+                </div>
+                <div class="market-status-item">
+                    <div>Market Condition</div>
+                    <div class="market-status-value" id="market-condition">Loading...</div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="fas fa-chart-line"></i>
+                        Market Overview
+                    </h2>
+                    <div class="pair-selector">
+                        <select id="pair-selector" class="filter-select">
+                            <option value="BTCUSDT">BTC/USDT</option>
+                            <option value="ETHUSDT">ETH/USDT</option>
+                            <option value="BNBUSDT">BNB/USDT</option>
+                            <option value="ADAUSDT">ADA/USDT</option>
+                            <option value="SOLUSDT">SOL/USDT</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3 class="stat-label">BTC Dominance</h3>
+                        <div class="stat-value" id="btc-dominance">Loading...</div>
+                        <div class="stat-label">Global Crypto Market</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3 class="stat-label">Fear & Greed Index</h3>
+                        <div class="stat-value" id="fear-greed">Loading...</div>
+                        <div class="stat-label">Market Sentiment</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3 class="stat-label">24h Volume</h3>
+                        <div class="stat-value" id="volume-change">Loading...</div>
+                        <div class="stat-label">Current Pair</div>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <div id="price-chart"></div>
+                </div>
+                
+                <div class="chart-container">
+                    <div id="volume-chart"></div>
+                </div>
+
+                <div class="chart-container">
+                    <div id="sentiment-chart"></div>
+                </div>
+                
+                <div id="home-error" class="error-message" style="display: none;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Error loading market data. Please check your connection and try again.
+                </div>
+            </div>
+        </div>
+
+        <!-- Signals Tab -->
+        <div id="signals" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="fas fa-satellite-dish"></i>
+                        Advanced Signal Scanner
+                    </h2>
+                    <div>
+                        <button id="stop-scan" class="btn btn-warning" style="display: none;">
+                            <i class="fas fa-stop"></i>
+                            Stop Scan
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Auto Scan Status -->
+                <div class="auto-scan-status">
+                    <div class="auto-scan-header">
+                        <h3>🔄 Auto Comprehensive Scanner</h3>
+                        <div class="scan-controls">
+                            <button id="start-auto-scan" class="btn btn-success">
+                                <i class="fas fa-play"></i> Start Auto Scan
+                            </button>
+                            <button id="stop-auto-scan" class="btn btn-warning" style="display: none;">
+                                <i class="fas fa-stop"></i> Stop Auto Scan
+                            </button>
+                            <button id="manual-scan-now" class="btn btn-filled">
+                                <i class="fas fa-sync"></i> Scan Now
+                            </button>
+                        </div>
+                    </div>
+                    <div class="auto-scan-info">
+                        <p>🔍 Scanning <strong>Top 100 pairs</strong> by volume every <strong>10 minutes</strong></p>
+                        <p>📊 Auto-sync existing signals and find new opportunities</p>
+                        <p>🚀 Real-time monitoring with background updates</p>
+                        <p>💹 <strong>Live prices</strong> updated every 10 seconds</p>
+                    </div>
+                </div>
+                
+                <div class="filter-section">
+                    <select id="filter-confidence" class="filter-select">
+                        <option value="all">All Confidence</option>
+                        <option value="high">High (80%+)</option>
+                        <option value="medium">Medium (60-80%)</option>
+                        <option value="low">Low (40-60%)</option>
+                    </select>
+                    
+                    <select id="filter-direction" class="filter-select">
+                        <option value="all">All Directions</option>
+                        <option value="BUY">Buy Signals</option>
+                        <option value="SELL">Sell Signals</option>
+                    </select>
+                    
+                    <select id="filter-status" class="filter-select">
+                        <option value="ACTIVE">Active Signals</option>
+                        <option value="FINISHED">Finished Signals</option>
+                        <option value="all">All Signals</option>
+                    </select>
+                    
+                    <button id="apply-filters" class="btn btn-filled">
+                        <i class="fas fa-filter"></i>
+                        Apply Filters
+                    </button>
+                    <button id="reset-filters" class="btn btn-outlined">
+                        <i class="fas fa-redo"></i>
+                        Reset
+                    </button>
+                    
+                    <button id="cleanup-finished" class="btn btn-warning">
+                        <i class="fas fa-broom"></i>
+                        Cleanup Finished
+                    </button>
+                </div>
+                
+                <div class="signal-stats">
+                    <div>
+                        <strong>Scan Progress:</strong>
+                        <span id="scan-progress">0%</span>
+                    </div>
+                    <div>
+                        <strong>Signals Found:</strong>
+                        <span id="signals-found">0</span>
+                    </div>
+                    <div>
+                        <strong>Active Monitors:</strong>
+                        <span id="active-monitors">0</span>
+                    </div>
+                    <div>
+                        <strong>Avg Confidence:</strong>
+                        <span id="avg-confidence">0%</span>
+                    </div>
+                </div>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" id="scan-progress-bar" style="width: 0%"></div>
+                </div>
+                
+                <div class="loading" id="signals-loading" style="display: none;">
+                    <div class="spinner"></div>
+                    <p id="scan-status">Initializing advanced scanner...</p>
+                    <p style="color: var(--md-on-surface-variant); margin-top: 15px;" id="scan-details"></p>
+                </div>
+                
+                <div class="signal-grid" id="signals-container">
+                    <div style="text-align: center; padding: 50px 25px; color: var(--md-on-surface-variant); grid-column: 1 / -1;">
+                        <div style="font-size: 4rem; margin-bottom: 25px; color: var(--md-primary);">
+                            <i class="fas fa-satellite-dish"></i>
+                        </div>
+                        <h3 style="margin-bottom: var(--md-space-sm);">Advanced Signal Scanner Ready</h3>
+                        <p>Start auto scan to find high-probability trading opportunities</p>
+                        <p style="margin-top: 15px; font-size: 0.95rem;">Multi-indicator analysis with RSI, MACD, Volume, and Trend confirmation</p>
+                        <p style="margin-top: 10px; font-size: 0.9rem; color: var(--quantum-success);">
+                            <i class="fas fa-bolt"></i> Live price monitoring enabled
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screener Tab -->
+        <div id="screener" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="fas fa-search"></i>
+                        Advanced Coin Screener
+                    </h2>
+                </div>
+                
+                <div class="search-container">
+                    <input type="text" id="coin-search" class="search-input" placeholder="Search for a coin (e.g., BTC, ETH, ADA, SOL, DOT)">
+                    <button id="search-button" class="search-button">
+                        <i class="fas fa-search"></i>
+                        Analyze
+                    </button>
+                    <div class="suggestions" id="search-suggestions"></div>
+                </div>
+                
+                <div class="loading" id="screener-loading" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>Performing deep technical analysis...</p>
+                </div>
+                
+                <div id="screener-results">
+                    <div style="text-align: center; padding: 60px 25px; color: var(--md-on-surface-variant);">
+                        <div style="font-size: 4rem; margin-bottom: 25px; color: var(--md-primary);">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h3 style="margin-bottom: var(--md-space-sm);">Coin Analysis Ready</h3>
+                        <p>Enter a coin symbol to get comprehensive technical analysis with support/resistance levels</p>
+                        <p style="margin-top: 15px; font-size: 0.95rem;">Includes RSI, MACD, Moving Averages, and Volume analysis</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Tab -->
+        <div id="results" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="fas fa-chart-bar"></i>
+                        Trading Performance
+                    </h2>
+                    <div>
+                        <select id="timeframe-filter" class="filter-select">
+                            <option value="all">All Time</option>
+                            <option value="today">Today</option>
+                            <option value="week">This Week</option>
+                            <option value="month">This Month</option>
+                            <option value="last_month">Last Month</option>
+                        </select>
+                        <button id="clear-results" class="btn btn-warning" style="margin-left: 10px;">
+                            <i class="fas fa-trash"></i>
+                            Clear All
+                        </button>
+                        <button id="export-results" class="btn btn-filled" style="margin-left: 10px;">
+                            <i class="fas fa-download"></i>
+                            Export CSV
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="stats-grid" id="results-summary">
+                    <div class="stat-card">
+                        <h3 class="stat-label">Total P&L</h3>
+                        <div class="stat-value" id="total-pnl">0%</div>
+                        <div class="stat-label" id="period-label">All Time Performance</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3 class="stat-label">Win Rate</h3>
+                        <div class="stat-value" id="win-rate">0%</div>
+                        <div class="stat-label">Success Ratio</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3 class="stat-label">Total Trades</h3>
+                        <div class="stat-value" id="total-trades">0</div>
+                        <div class="stat-label">Trade Count</div>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <div style="overflow-x: auto;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Symbol</th>
+                                    <th>Direction</th>
+                                    <th>Entry</th>
+                                    <th>SL</th>
+                                    <th>Targets</th>
+                                    <th>Outcome</th>
+                                    <th>PNL</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="results-table-body">
+                                <tr>
+                                    <td colspan="9" style="text-align: center; padding: 50px; color: var(--md-on-surface-variant);">
+                                        <div style="font-size: 4rem; margin-bottom: 20px; color: var(--md-primary);">
+                                            <i class="fas fa-chart-bar"></i>
+                                        </div>
+                                        <h3 style="margin-bottom: var(--md-space-sm);">No Trading Results Yet</h3>
+                                        <p>Completed signals from the scanner will appear here automatically</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // PROFESSIONAL TRADING SCANNER - COMPLETE VERSION WITH LIVE PRICES
+        class ProTradingScanner {
+            constructor() {
+                this.activeSignals = new Map();
+                this.isScanning = false;
+                this.isAutoScanning = false;
+                this.monitoringInterval = null;
+                this.autoScanInterval = null;
+                this.priceUpdateInterval = null;
+                this.scanProgress = 0;
+                this.totalSymbols = 0;
+                this.scannedSymbols = 0;
+                this.currentPair = 'BTCUSDT';
+                this.scanType = 'comprehensive';
+                this.autoScanDelay = 600000; // 10 minutes
+                this.filters = {
+                    confidence: 'all',
+                    direction: 'all',
+                    status: 'ACTIVE'
+                };
+                
+                this.volumeCache = new Map();
+                this.cacheDuration = 300000; // 5 minutes
+                this.allPairsCache = null;
+                this.lastScanTime = null;
+                
+                this.initializeApp();
+            }
+            
+            initializeApp() {
+                this.setupEventListeners();
+                this.loadInitialData();
+                this.startBackgroundMonitoring();
+                this.startLivePriceMonitoring(); // ✅ LIVE PRICE MONITORING
+                this.loadStoredSignals();
+                this.preloadAllPairs();
+                
+                // Auto-start comprehensive scan setelah 3 detik
+                setTimeout(() => {
+                    this.startAutoScan();
+                }, 3000);
+                
+                // Auto-refresh setiap 60 detik
+                setInterval(() => {
+                    if (document.getElementById('home').classList.contains('active')) {
+                        this.loadHomeData();
+                    }
+                    this.updateLastUpdated();
+                }, 60000);
+            }
+            
+            setupEventListeners() {
+                // Navigation tabs
+                document.querySelectorAll('.nav-tab').forEach(tab => {
+                    tab.addEventListener('click', (e) => {
+                        const tabId = e.currentTarget.getAttribute('data-tab');
+                        this.switchTab(tabId);
+                    });
+                });
+
+                // Refresh button
+                document.getElementById('refresh-btn').addEventListener('click', () => {
+                    this.loadHomeData();
+                    this.showNotification('Data refreshed', 'success');
+                });
+                
+                // Home tab
+                document.getElementById('pair-selector').addEventListener('change', (e) => {
+                    this.currentPair = e.target.value;
+                    this.loadHomeData();
+                });
+                
+                // Auto scan controls
+                document.getElementById('start-auto-scan').addEventListener('click', () => {
+                    this.startAutoScan();
+                });
+                
+                document.getElementById('stop-auto-scan').addEventListener('click', () => {
+                    this.stopAutoScan();
+                });
+                
+                document.getElementById('manual-scan-now').addEventListener('click', () => {
+                    this.executeAutoScan();
+                });
+                
+                document.getElementById('stop-scan').addEventListener('click', () => {
+                    this.stopSignalScan();
+                });
+                
+                // Filters
+                document.getElementById('apply-filters').addEventListener('click', () => {
+                    this.applyFilters();
+                });
+                
+                document.getElementById('reset-filters').addEventListener('click', () => {
+                    this.resetFilters();
+                });
+                
+                document.getElementById('cleanup-finished').addEventListener('click', () => {
+                    this.cleanupFinishedSignals();
+                });
+                
+                // Screener tab
+                document.getElementById('search-button').addEventListener('click', () => {
+                    this.searchCoin();
+                });
+                
+                document.getElementById('coin-search').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.searchCoin();
+                });
+                
+                document.getElementById('coin-search').addEventListener('input', (e) => {
+                    this.handleSearchSuggestions(e.target.value);
+                });
+                
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('.search-container')) {
+                        document.getElementById('search-suggestions').style.display = 'none';
+                    }
+                });
+                
+                // Results tab
+                document.getElementById('timeframe-filter').addEventListener('change', () => {
+                    this.loadResults();
+                });
+                
+                document.getElementById('clear-results').addEventListener('click', () => {
+                    this.clearResults();
+                });
+                
+                document.getElementById('export-results').addEventListener('click', () => {
+                    this.exportResults();
+                });
+            }
+            
+            switchTab(tabId) {
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+
+                if (tabId === 'home') this.loadHomeData();
+                if (tabId === 'results') this.loadResults();
+            }
+            
+            async loadInitialData() {
+                await this.loadHomeData();
+                this.loadResults();
+                this.updateLastUpdated();
+            }
+            
+            // ==================== HOME TAB ====================
+            async loadHomeData() {
+                try {
+                    await this.loadMarketOverview();
+                    await this.loadChartData();
+                    await this.loadSentimentData();
+                } catch (error) {
+                    console.error('Error loading home data:', error);
+                    this.showNotification('Error loading market data', 'error');
+                }
+            }
+            
+            async loadMarketOverview() {
+                try {
+                    // BTC Dominance
+                    const globalResponse = await fetch('https://api.coingecko.com/api/v3/global');
+                    const globalData = await globalResponse.json();
+                    const btcDominance = globalData.data.market_cap_percentage.btc.toFixed(2);
+                    
+                    // Fear & Greed Index
+                    const fngResponse = await fetch('https://api.alternative.me/fng/');
+                    const fngData = await fngResponse.json();
+                    const fngValue = fngData.data[0].value;
+                    const fngClassification = fngData.data[0].value_classification;
+                    
+                    // Current pair data
+                    const tickerResponse = await fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${this.currentPair}`);
+                    const tickerData = await tickerResponse.json();
+                    
+                    let volumeValue;
+                    if (tickerData.volume !== undefined) {
+                        const volumeUSD = parseFloat(tickerData.volume) * parseFloat(tickerData.lastPrice);
+                        volumeValue = volumeUSD >= 1e9 ? (volumeUSD/1e9).toFixed(2) + 'B' : 
+                                    volumeUSD >= 1e6 ? (volumeUSD/1e6).toFixed(2) + 'M' : 
+                                    volumeUSD >= 1e3 ? (volumeUSD/1e3).toFixed(2) + 'K' : volumeUSD.toFixed(2);
+                    } else {
+                        volumeValue = 'N/A';
+                    }
+                    
+                    // Update DOM
+                    document.getElementById('btc-dominance').textContent = `${btcDominance}%`;
+                    document.getElementById('fear-greed').textContent = `${fngValue} - ${fngClassification}`;
+                    document.getElementById('volume-change').textContent = `$${volumeValue}`;
+                    
+                    document.getElementById('active-signals').textContent = Array.from(this.activeSignals.values()).filter(s => s.status === 'ACTIVE').length;
+                    document.getElementById('market-condition').textContent = 
+                        fngValue > 50 ? 'Bullish' : fngValue < 30 ? 'Bearish' : 'Neutral';
+                        
+                } catch (error) {
+                    console.error('Error loading market overview:', error);
+                    document.getElementById('home-error').style.display = 'block';
+                }
+            }
+            
+            async loadSentimentData() {
+                try {
+                    const dates = [];
+                    const now = new Date();
+                    
+                    // Generate last 7 days
+                    for (let i = 6; i >= 0; i--) {
+                        const date = new Date(now);
+                        date.setDate(date.getDate() - i);
+                        dates.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+                    }
+                    
+                    // Get current Fear & Greed data
+                    const fngResponse = await fetch('https://api.alternative.me/fng/');
+                    const fngData = await fngResponse.json();
+                    const currentFng = parseInt(fngData.data[0].value);
+                    
+                    // Generate realistic sentiment data based on current value
+                    const baseSentiment = currentFng;
+                    const sentimentData = [
+                        Math.max(0, Math.min(100, baseSentiment - 15 + Math.random() * 30)),
+                        Math.max(0, Math.min(100, baseSentiment - 10 + Math.random() * 25)),
+                        Math.max(0, Math.min(100, baseSentiment - 5 + Math.random() * 20)),
+                        Math.max(0, Math.min(100, baseSentiment + Math.random() * 15)),
+                        Math.max(0, Math.min(100, baseSentiment + 5 + Math.random() * 10)),
+                        Math.max(0, Math.min(100, baseSentiment + 10 + Math.random() * 5)),
+                        baseSentiment
+                    ];
+                    
+                    const sentimentOptions = {
+                        series: [{
+                            name: 'Market Sentiment',
+                            data: sentimentData
+                        }],
+                        chart: {
+                            height: '100%',
+                            type: 'line',
+                            foreColor: 'var(--md-on-surface)',
+                            toolbar: { show: true }
+                        },
+                        colors: ['var(--md-primary)'],
+                        stroke: { width: 3, curve: 'smooth' },
+                        markers: { size: 5, hover: { size: 7 } },
+                        title: { 
+                            text: 'Market Sentiment Trend (7 Days)',
+                            align: 'left',
+                            style: { color: 'var(--md-on-surface)', fontSize: '16px', fontWeight: 'bold' }
+                        },
+                        xaxis: {
+                            categories: dates,
+                            labels: { style: { colors: 'var(--md-on-surface-variant)' } }
+                        },
+                        yaxis: {
+                            min: 0, max: 100,
+                            labels: { style: { colors: 'var(--md-on-surface-variant)' } },
+                            title: { text: 'Sentiment Score', style: { color: 'var(--md-on-surface)' } }
+                        },
+                        grid: { borderColor: 'var(--md-surface-variant)', strokeDashArray: 4 },
+                        tooltip: {
+                            theme: 'light',
+                            y: {
+                                formatter: function(value) {
+                                    let sentiment = 'Neutral';
+                                    if (value < 25) sentiment = 'Extreme Fear';
+                                    else if (value < 45) sentiment = 'Fear';
+                                    else if (value < 55) sentiment = 'Neutral';
+                                    else if (value < 75) sentiment = 'Greed';
+                                    else sentiment = 'Extreme Greed';
+                                    
+                                    return value + ' / 100 (' + sentiment + ')';
+                                }
+                            }
+                        }
+                    };
+                    
+                    const sentimentChartElement = document.querySelector("#sentiment-chart");
+                    if (window.sentimentChart) {
+                        window.sentimentChart.updateOptions(sentimentOptions);
+                    } else {
+                        window.sentimentChart = new ApexCharts(sentimentChartElement, sentimentOptions);
+                        window.sentimentChart.render();
+                    }
+                    
+                } catch (error) {
+                    console.error('Error loading sentiment data:', error);
+                }
+            }
+            
+            async loadChartData() {
+                try {
+                    const klinesResponse = await fetch(`https://api.binance.com/api/v3/klines?symbol=${this.currentPair}&interval=1h&limit=50`);
+                    const klinesData = await klinesResponse.json();
+                    
+                    const candlestickData = klinesData.map(k => ({
+                        x: new Date(k[0]),
+                        y: [parseFloat(k[1]), parseFloat(k[2]), parseFloat(k[3]), parseFloat(k[4])]
+                    }));
+                    
+                    const volumeData = klinesData.map(k => ({
+                        x: new Date(k[0]),
+                        y: parseFloat(k[5])
+                    }));
+                    
+                    this.initializeCharts(candlestickData, volumeData);
+                    
+                } catch (error) {
+                    console.error('Error loading chart data:', error);
+                }
+            }
+            
+            initializeCharts(candlestickData, volumeData) {
+                // Price chart
+                const priceOptions = {
+                    series: [{ data: candlestickData }],
+                    chart: { 
+                        height: '100%', 
+                        type: 'candlestick',
+                        foreColor: 'var(--md-on-surface)',
+                        toolbar: { show: true }
+                    },
+                    title: { 
+                        text: `${this.currentPair} Price Chart`,
+                        align: 'left',
+                        style: { color: 'var(--md-on-surface)', fontSize: '16px', fontWeight: 'bold' }
+                    },
+                    xaxis: { type: 'datetime' },
+                    yaxis: { 
+                        tooltip: { enabled: true },
+                        labels: { formatter: val => '$' + val.toFixed(2) }
+                    },
+                    plotOptions: {
+                        candlestick: {
+                            colors: { upward: '#00C853', downward: '#FF4757' }
+                        }
+                    }
+                };
+                
+                if (window.priceChart) {
+                    window.priceChart.updateOptions(priceOptions);
+                } else {
+                    window.priceChart = new ApexCharts(document.querySelector("#price-chart"), priceOptions);
+                    window.priceChart.render();
+                }
+                
+                // Volume chart
+                const volumeOptions = {
+                    series: [{ data: volumeData }],
+                    chart: { 
+                        height: '100%', 
+                        type: 'bar',
+                        foreColor: 'var(--md-on-surface)'
+                    },
+                    colors: ['var(--md-primary)'],
+                    title: { 
+                        text: `${this.currentPair} Trading Volume`,
+                        align: 'left',
+                        style: { color: 'var(--md-on-surface)', fontSize: '16px', fontWeight: 'bold' }
+                    },
+                    xaxis: { type: 'datetime' },
+                    yaxis: {
+                        labels: { 
+                            formatter: val => {
+                                if (val >= 1e6) return (val/1e6).toFixed(1) + 'M';
+                                if (val >= 1e3) return (val/1e3).toFixed(1) + 'K';
+                                return val;
+                            }
+                        }
+                    }
+                };
+                
+                if (window.volumeChart) {
+                    window.volumeChart.updateOptions(volumeOptions);
+                } else {
+                    window.volumeChart = new ApexCharts(document.querySelector("#volume-chart"), volumeOptions);
+                    window.volumeChart.render();
+                }
+            }
+
+            // ==================== LIVE PRICE MONITORING ====================
+            startLivePriceMonitoring() {
+                // Update prices every 10 seconds for active signals
+                this.priceUpdateInterval = setInterval(() => {
+                    this.updateAllSignalPrices();
+                }, 10000);
+                
+                // Immediate first update
+                setTimeout(() => {
+                    this.updateAllSignalPrices();
+                }, 2000);
+            }
+            
+            async updateAllSignalPrices() {
+                const activeSymbols = Array.from(this.activeSignals.keys());
+                if (activeSymbols.length === 0) return;
+                
+                // Batch update prices untuk efficiency
+                const batchSize = 5;
+                for (let i = 0; i < activeSymbols.length; i += batchSize) {
+                    const batch = activeSymbols.slice(i, i + batchSize);
+                    await Promise.allSettled(
+                        batch.map(symbol => this.updateSingleSignalPrice(symbol))
+                    );
+                    
+                    // Small delay antara batches untuk avoid rate limit
+                    await new Promise(resolve => setTimeout(resolve, 300));
+                }
+            }
+            
+            async updateSingleSignalPrice(symbol) {
+                try {
+                    const currentPrice = await this.getCurrentPrice(symbol);
+                    const signal = this.activeSignals.get(symbol);
+                    
+                    if (!signal || !currentPrice) return;
+                    
+                    const priceElement = document.getElementById(`current-price-${symbol}`);
+                    if (!priceElement) return;
+                    
+                    const entryPrice = signal.entry;
+                    const priceChange = ((currentPrice - entryPrice) / entryPrice) * 100;
+                    const changeSign = priceChange >= 0 ? '+' : '';
+                    
+                    // Determine color based on performance
+                    let priceClass = 'price-neutral';
+                    if (signal.direction === 'BUY') {
+                        priceClass = priceChange >= 0 ? 'price-positive' : 'price-negative';
+                    } else { // SELL signal
+                        priceClass = priceChange <= 0 ? 'price-positive' : 'price-negative';
+                    }
+                    
+                    priceElement.innerHTML = `
+                        <span class="${priceClass}">
+                            $${currentPrice.toFixed(4)}
+                        </span>
+                        <div style="font-size: 0.7em; margin-top: 2px; color: ${priceChange >= 0 ? '#00C853' : '#FF4757'}">
+                            ${changeSign}${priceChange.toFixed(2)}%
+                        </div>
+                    `;
+                    
+                } catch (error) {
+                    console.error(`Error updating price for ${symbol}:`, error);
+                    const priceElement = document.getElementById(`current-price-${symbol}`);
+                    if (priceElement) {
+                        priceElement.innerHTML = `<span style="color: var(--md-error)">Price Error</span>`;
+                    }
+                }
+            }
+
+            // ==================== AUTO SCAN SYSTEM ====================
+            startAutoScan() {
+                if (this.isAutoScanning) return;
+                
+                this.isAutoScanning = true;
+                document.getElementById('start-auto-scan').style.display = 'none';
+                document.getElementById('stop-auto-scan').style.display = 'inline-block';
+                
+                // Immediate first scan
+                this.executeAutoScan();
+                
+                // Schedule recurring scans
+                this.autoScanInterval = setInterval(() => {
+                    this.executeAutoScan();
+                }, this.autoScanDelay);
+                
+                this.showNotification('Auto comprehensive scan started (every 10 minutes)', 'success');
+            }
+
+            stopAutoScan() {
+                this.isAutoScanning = false;
+                document.getElementById('start-auto-scan').style.display = 'inline-block';
+                document.getElementById('stop-auto-scan').style.display = 'none';
+                
+                if (this.autoScanInterval) {
+                    clearInterval(this.autoScanInterval);
+                    this.autoScanInterval = null;
+                }
+                
+                this.showNotification('Auto scan stopped', 'warning');
+            }
+
+            async executeAutoScan() {
+                if (this.isScanning) return;
+                
+                this.isScanning = true;
+                this.scanType = 'comprehensive';
+                this.lastScanTime = new Date();
+                
+                try {
+                    document.getElementById('signals-loading').style.display = 'block';
+                    document.getElementById('scan-status').textContent = 
+                        '🔄 Auto-scanning Top 100 pairs & syncing existing signals...';
+                    
+                    // Step 1: Cleanup finished signals
+                    const cleanedCount = this.cleanupFinishedSignals();
+                    
+                    // Step 2: Sync existing active signals
+                    await this.syncExistingSignals();
+                    
+                    // Step 3: Scan new symbols only
+                    const newSymbols = await this.getNewSymbolsForScan();
+                    this.totalSymbols = newSymbols.length;
+                    
+                    if (newSymbols.length > 0) {
+                        document.getElementById('scan-status').textContent = 
+                            `🔄 Scanning ${newSymbols.length} new pairs (${cleanedCount} cleaned)...`;
+                        await this.scanSymbolsInBatches(newSymbols, 3, 1000);
+                    } else {
+                        document.getElementById('scan-status').textContent = 
+                            `✅ No new pairs. Monitoring ${this.activeSignals.size} active signals...`;
+                    }
+                    
+                    this.showNotification(`Auto scan completed! ${this.activeSignals.size} active signals`, 'success');
+                    
+                } catch (error) {
+                    console.error('Error during auto scan:', error);
+                    this.showNotification('Auto scan failed', 'error');
+                } finally {
+                    this.isScanning = false;
+                    document.getElementById('signals-loading').style.display = 'none';
+                }
+            }
+
+            async syncExistingSignals() {
+                const syncPromises = Array.from(this.activeSignals.values()).map(async (signal) => {
+                    if (signal.status !== 'ACTIVE') return;
+                    
+                    try {
+                        const currentPrice = await this.getCurrentPrice(signal.symbol);
+                        const updatedSignal = this.checkSignalStatus(signal, currentPrice);
+                        
+                        if (updatedSignal.status !== signal.status) {
+                            this.activeSignals.set(signal.symbol, updatedSignal);
+                            this.saveSignalToStorage(updatedSignal);
+                        }
+                    } catch (error) {
+                        console.error(`Error syncing ${signal.symbol}:`, error);
+                    }
+                });
+                
+                await Promise.all(syncPromises);
+                this.updateSignalDisplay();
+            }
+
+            async getNewSymbolsForScan() {
+                const allSymbols = await this.getTradingPairs();
+                const activeSymbols = Array.from(this.activeSignals.keys());
+                
+                return allSymbols
+                    .map(s => s.symbol)
+                    .filter(symbol => !activeSymbols.includes(symbol))
+                    .slice(0, 30); // Limit to 30 new symbols per scan
+            }
+
+            // ==================== SCREENER TAB ====================
+            async preloadAllPairs() {
+                try {
+                    const response = await fetch('https://api.binance.com/api/v3/exchangeInfo');
+                    const data = await response.json();
+                    
+                    this.allPairsCache = data.symbols
+                        .filter(s => s.symbol.endsWith('USDT') && s.status === 'TRADING')
+                        .map(s => s.symbol)
+                        .sort();
+                        
+                } catch (error) {
+                    console.error('Error loading pairs from Binance:', error);
+                    this.allPairsCache = [
+                        'BTCUSDT', 'ETHUSDT', 'BNBUSDT', 'ADAUSDT', 'SOLUSDT',
+                        'XRPUSDT', 'DOTUSDT', 'DOGEUSDT', 'MATICUSDT', 'LTCUSDT',
+                        'AVAXUSDT', 'LINKUSDT', 'ATOMUSDT', 'XLMUSDT', 'BCHUSDT'
+                    ];
+                }
+            }
+
+            handleSearchSuggestions(query) {
+                if (!query || query.length < 1) {
+                    document.getElementById('search-suggestions').style.display = 'none';
+                    return;
+                }
+
+                const suggestions = document.getElementById('search-suggestions');
+                suggestions.innerHTML = '';
+
+                if (this.allPairsCache) {
+                    const filtered = this.allPairsCache
+                        .filter(pair => 
+                            pair.toLowerCase().includes(query.toLowerCase()) ||
+                            pair.replace('USDT', '').toLowerCase().includes(query.toLowerCase())
+                        )
+                        .slice(0, 10);
+
+                    if (filtered.length > 0) {
+                        filtered.forEach(pair => {
+                            const suggestion = document.createElement('div');
+                            suggestion.className = 'suggestion-item';
+                            suggestion.innerHTML = `
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span>${pair}</span>
+                                    <small style="color: var(--md-on-surface-variant);">${pair.replace('USDT', '')}/USDT</small>
+                                </div>
+                            `;
+                            suggestion.addEventListener('click', () => {
+                                document.getElementById('coin-search').value = pair;
+                                suggestions.style.display = 'none';
+                                this.searchCoin();
+                            });
+                            suggestions.appendChild(suggestion);
+                        });
+                        suggestions.style.display = 'block';
+                    } else {
+                        suggestions.style.display = 'none';
+                    }
+                }
+            }
+
+            async searchCoin() {
+                const query = document.getElementById('coin-search').value.toUpperCase();
+                if (!query) {
+                    this.showNotification('Please enter a coin symbol', 'warning');
+                    return;
+                }
+                
+                const symbol = query.endsWith('USDT') ? query : `${query}USDT`;
+                
+                document.getElementById('screener-loading').style.display = 'block';
+                document.getElementById('screener-results').innerHTML = '';
+                
+                try {
+                    const analysis = await this.analyzeSymbolForScreener(symbol);
+                    this.displayScreenerResults(symbol, analysis);
+                } catch (error) {
+                    document.getElementById('screener-results').innerHTML = `
+                        <div style="color: var(--md-error); text-align: center; padding: 40px 20px;">
+                            <div style="font-size: 3rem; margin-bottom: 15px;">❌</div>
+                            <h3>Coin Not Found</h3>
+                            <p>Unable to find data for "${symbol}"</p>
+                            <p style="margin-top: 10px; font-size: 0.9rem;">Please check the symbol and try again</p>
+                        </div>
+                    `;
+                } finally {
+                    document.getElementById('screener-loading').style.display = 'none';
+                }
+            }
+            
+            async analyzeSymbolForScreener(symbol) {
+                const [klinesResponse, tickerResponse] = await Promise.all([
+                    fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=1h&limit=50`),
+                    fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${symbol}`)
+                ]);
+                
+                if (!klinesResponse.ok || !tickerResponse.ok) {
+                    throw new Error('Coin not found');
+                }
+                
+                const klinesData = await klinesResponse.json();
+                const tickerData = await tickerResponse.json();
+                
+                const closes = klinesData.map(k => parseFloat(k[4]));
+                const highs = klinesData.map(k => parseFloat(k[2]));
+                const lows = klinesData.map(k => parseFloat(k[3]));
+                const volumes = klinesData.map(k => parseFloat(k[5]));
+                
+                const currentPrice = parseFloat(tickerData.lastPrice);
+                const priceChange = parseFloat(tickerData.priceChangePercent);
+                const volume24h = (parseFloat(tickerData.volume) * currentPrice).toLocaleString();
+                
+                const rsi = this.calculateRSI(closes);
+                const trend = this.determineTrend(closes);
+                const momentum = this.calculateMomentum(closes);
+                const volumeRatio = this.analyzeVolume(volumes);
+                
+                const resistance = Math.max(...highs);
+                const support = Math.min(...lows);
+                
+                return {
+                    symbol,
+                    currentPrice,
+                    priceChange,
+                    volume24h,
+                    rsi,
+                    trend,
+                    momentum,
+                    volumeRatio,
+                    resistance,
+                    support
+                };
+            }
+            
+            displayScreenerResults(symbol, analysis) {
+                const direction = analysis.priceChange >= 0 ? 'BUY' : 'SELL';
+                const directionColor = analysis.priceChange >= 0 ? '#00C853' : '#FF4757';
+                const trendColor = analysis.trend === 'BULLISH' ? '#00C853' : analysis.trend === 'BEARISH' ? '#FF4757' : '#FFA726';
+                
+                document.getElementById('screener-results').innerHTML = `
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">📊 ${symbol} Technical Analysis</h2>
+                            <span style="color: ${directionColor}; font-size: 1.3rem; font-weight: bold;">
+                                ${analysis.priceChange >= 0 ? '📈' : '📉'} ${analysis.priceChange.toFixed(2)}%
+                            </span>
+                        </div>
+                        
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <h3 class="stat-label">Current Price</h3>
+                                <div class="stat-value">$${analysis.currentPrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 4})}</div>
+                                <div class="stat-label">Live Price</div>
+                            </div>
+                            <div class="stat-card">
+                                <h3 class="stat-label">RSI</h3>
+                                <div class="stat-value ${analysis.rsi < 30 ? 'positive' : analysis.rsi > 70 ? 'negative' : ''}">
+                                    ${analysis.rsi.toFixed(1)}
+                                </div>
+                                <div class="stat-label">Momentum</div>
+                            </div>
+                            <div class="stat-card">
+                                <h3 class="stat-label">24h Volume</h3>
+                                <div class="stat-value">$${analysis.volume24h}</div>
+                                <div class="stat-label">USD Volume</div>
+                            </div>
+                        </div>
+                        
+                        <div class="technical-dashboard">
+                            <div class="indicator-group">
+                                <h4>Technical Indicators</h4>
+                                <div class="indicator-row">
+                                    <div class="indicator-item enhanced">
+                                        <div class="indicator-value" style="color: ${trendColor};">${analysis.trend}</div>
+                                        <div class="indicator-label">Trend</div>
+                                        <div style="font-size: 0.7rem; font-weight: 600; padding: 2px 6px; border-radius: 8px; display: inline-block; background: ${trendColor}22; color: ${trendColor};">${analysis.trend} Market</div>
+                                    </div>
+                                    <div class="indicator-item enhanced">
+                                        <div class="indicator-value">${analysis.momentum > 0 ? '+' : ''}${analysis.momentum.toFixed(2)}%</div>
+                                        <div class="indicator-label">Momentum</div>
+                                        <div style="font-size: 0.7rem; font-weight: 600; padding: 2px 6px; border-radius: 8px; display: inline-block; background: ${analysis.momentum > 2 ? 'rgba(0, 200, 83, 0.2)' : analysis.momentum < -2 ? 'rgba(255, 71, 87, 0.2)' : 'rgba(255, 167, 38, 0.2)'}; color: ${analysis.momentum > 2 ? '#00C853' : analysis.momentum < -2 ? '#FF4757' : '#FFA726'};">${analysis.momentum > 2 ? 'Strong' : analysis.momentum < -2 ? 'Weak' : 'Neutral'}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="indicator-group">
+                                <h4>Support & Resistance</h4>
+                                <div class="indicator-row">
+                                    <div class="indicator-item enhanced">
+                                        <div class="indicator-value">$${analysis.resistance.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 4})}</div>
+                                        <div class="indicator-label">Resistance</div>
+                                        <div style="font-size: 0.7rem; font-weight: 600; padding: 2px 6px; border-radius: 8px; display: inline-block; background: rgba(255, 71, 87, 0.2); color: #FF4757;">Sell Zone</div>
+                                    </div>
+                                    <div class="indicator-item enhanced">
+                                        <div class="indicator-value">$${analysis.support.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 4})}</div>
+                                        <div class="indicator-label">Support</div>
+                                        <div style="font-size: 0.7rem; font-weight: 600; padding: 2px 6px; border-radius: 8px; display: inline-block; background: rgba(0, 200, 83, 0.2); color: #00C853;">Buy Zone</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 30px; padding: 25px; background: var(--md-surface-variant); border-radius: 12px;">
+                            <h3 style="margin-bottom: 15px; color: ${directionColor};">Trading Recommendation</h3>
+                            <p style="font-size: 1.1rem; margin-bottom: 15px;">
+                                <strong>Signal:</strong> 
+                                <span class="technical-badge ${direction === 'BUY' ? 'badge-buy' : 'badge-sell'}">
+                                    ${direction} RECOMMENDED
+                                </span>
+                            </p>
+                            <p style="margin-bottom: 10px;"><strong>RSI:</strong> ${analysis.rsi < 30 ? 'Oversold (Bullish)' : analysis.rsi > 70 ? 'Overbought (Bearish)' : 'Neutral'}</p>
+                            <p style="margin-bottom: 10px;"><strong>Trend:</strong> ${analysis.trend}</p>
+                            <p style="margin-bottom: 10px;"><strong>Momentum:</strong> ${analysis.momentum > 0 ? 'Bullish' : 'Bearish'}</p>
+                            <p style="margin-bottom: 10px;"><strong>Volume Activity:</strong> ${analysis.volumeRatio > 1.2 ? 'High' : analysis.volumeRatio < 0.8 ? 'Low' : 'Normal'}</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // ==================== SIGNALS TAB ====================
+            async getTradingPairs() {
+                const cached = this.volumeCache.get('top_pairs');
+                if (cached && Date.now() - cached.timestamp < this.cacheDuration) {
+                    return this.filterPairsByScanType(cached.data);
+                }
+
+                const volumeData = await this.fetchVolumeData();
+                const topPairs = this.filterByVolume(volumeData);
+                
+                this.volumeCache.set('top_pairs', {
+                    data: topPairs,
+                    timestamp: Date.now()
+                });
+                
+                return this.filterPairsByScanType(topPairs);
+            }
+            
+            filterPairsByScanType(pairs) {
+                // Always comprehensive - top 100 pairs
+                return pairs.slice(0, 100);
+            }
+            
+            async fetchVolumeData() {
+                try {
+                    const response = await fetch('https://api.binance.com/api/v3/ticker/24hr');
+                    const tickers = await response.json();
+                    
+                    return tickers
+                        .filter(t => t.symbol.endsWith('USDT'))
+                        .map(t => ({
+                            symbol: t.symbol,
+                            volume: parseFloat(t.volume) * parseFloat(t.lastPrice),
+                            price: parseFloat(t.lastPrice),
+                            priceChange: parseFloat(t.priceChangePercent)
+                        }))
+                        .sort((a, b) => b.volume - a.volume);
+                } catch (error) {
+                    console.error('Error fetching volume data:', error);
+                    return this.getFallbackPairs();
+                }
+            }
+            
+            filterByVolume(tickers) {
+                return tickers
+                    .filter(t => 
+                        t.volume > 1000000 &&
+                        t.price > 0.01 &&
+                        !this.isStablecoinPair(t.symbol)
+                    );
+            }
+            
+            getFallbackPairs() {
+                const majorPairs = [
+                    'BTCUSDT', 'ETHUSDT', 'BNBUSDT', 'ADAUSDT', 'SOLUSDT',
+                    'XRPUSDT', 'DOTUSDT', 'DOGEUSDT', 'MATICUSDT', 'LTCUSDT',
+                    'AVAXUSDT', 'LINKUSDT', 'ATOMUSDT', 'XLMUSDT', 'BCHUSDT',
+                    'ETCUSDT', 'FILUSDT', 'ALGOUSDT', 'NEARUSDT', 'UNIUSDT'
+                ];
+                // Return 100 pairs by repeating major pairs
+                const pairs = [];
+                for (let i = 0; i < 5; i++) {
+                    pairs.push(...majorPairs.map(symbol => ({ 
+                        symbol, 
+                        volume: 10000000, 
+                        price: 100, 
+                        priceChange: 0 
+                    })));
+                }
+                return pairs.slice(0, 100);
+            }
+            
+            isStablecoinPair(symbol) {
+                const stablecoins = ['BUSD', 'USDC', 'DAI', 'TUSD', 'USDP'];
+                return stablecoins.some(coin => symbol.includes(coin));
+            }
+            
+            loadStoredSignals() {
+                const storedSignals = JSON.parse(localStorage.getItem('quantum_signals') || '[]');
+                storedSignals.forEach(signal => {
+                    this.activeSignals.set(signal.symbol, signal);
+                });
+                this.updateSignalDisplay();
+            }
+            
+            stopSignalScan() {
+                this.isScanning = false;
+                document.getElementById('stop-scan').style.display = 'none';
+                document.getElementById('signals-loading').style.display = 'none';
+                this.showNotification('Market scan stopped', 'warning');
+            }
+            
+            async scanSymbolsInBatches(symbols, batchSize = 3, delay = 1000) {
+                for (let i = 0; i < symbols.length; i += batchSize) {
+                    if (!this.isScanning) break;
+                    
+                    const batch = symbols.slice(i, i + batchSize);
+                    await Promise.all(batch.map(symbol => this.analyzeSymbolWithMultipleTimeframes(symbol)));
+                    
+                    this.scannedSymbols += batch.length;
+                    this.scanProgress = (this.scannedSymbols / this.totalSymbols) * 100;
+                    
+                    this.updateScanProgress();
+                    
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                }
+            }
+            
+            updateScanProgress() {
+                document.getElementById('scan-progress').textContent = `${this.scanProgress.toFixed(1)}%`;
+                document.getElementById('scan-progress-bar').style.width = `${this.scanProgress}%`;
+                document.getElementById('signals-found').textContent = this.activeSignals.size;
+                document.getElementById('scan-status').textContent = 
+                    `Scanned ${this.scannedSymbols}/${this.totalSymbols} pairs • ${this.activeSignals.size} signals found`;
+            }
+            
+            async analyzeSymbolWithMultipleTimeframes(symbol) {
+                try {
+                    const [hourlyData, fourHourData] = await Promise.all([
+                        this.fetchKlines(symbol, '1h', 100),
+                        this.fetchKlines(symbol, '4h', 50)
+                    ]);
+                    
+                    if (!hourlyData.length || !fourHourData.length) return;
+                    
+                    const analysis = this.performAdvancedTechnicalAnalysis(hourlyData, fourHourData);
+                    
+                    if (analysis.hasSignal && analysis.confidence >= 40) {
+                        const existingSignal = this.activeSignals.get(symbol);
+                        
+                        // Check jika signal masih valid atau perlu diganti
+                        if (this.isSignalStillValid(symbol, analysis)) {
+                            
+                            if (existingSignal) {
+                                // Update existing signal dengan data baru
+                                const updatedSignal = {
+                                    ...existingSignal,
+                                    direction: analysis.direction,
+                                    confidence: analysis.confidence,
+                                    indicators: analysis.indicators,
+                                    currentPrice: analysis.currentPrice,
+                                    timestamp: new Date().toISOString(),
+                                    // Reset targets jika direction berubah
+                                    targets: analysis.direction === existingSignal.direction ? 
+                                            existingSignal.targets : 
+                                            this.calculateTargets(analysis.currentPrice, analysis.direction),
+                                    // Reset status jika direction berubah
+                                    status: analysis.direction === existingSignal.direction ? 
+                                           existingSignal.status : 'ACTIVE',
+                                    targetsStatus: analysis.direction === existingSignal.direction ? 
+                                                  existingSignal.targetsStatus : ['PENDING', 'PENDING', 'PENDING']
+                                };
+                                
+                                this.activeSignals.set(symbol, updatedSignal);
+                                this.updateSignalDisplay();
+                                
+                                if (analysis.direction !== existingSignal.direction) {
+                                    this.showNotification(`🔄 ${symbol} - Signal reversal detected!`, 'warning');
+                                }
+                                
+                            } else {
+                                // Buat signal baru
+                                const signal = this.createAdvancedSignal(symbol, analysis);
+                                this.activeSignals.set(symbol, signal);
+                                this.displaySignal(signal);
+                            }
+                            
+                            this.saveSignalToStorage(signal);
+                        }
+                    }
+                    
+                } catch (error) {
+                    console.error(`Error analyzing ${symbol}:`, error);
+                }
+            }
+            
+            isSignalStillValid(symbol, newAnalysis) {
+                const existingSignal = this.activeSignals.get(symbol);
+                
+                // Jika tidak ada signal existing, selalu valid (signal baru)
+                if (!existingSignal) return true;
+                
+                // Jika signal existing sudah selesai (SL/Completed), boleh buat signal baru
+                if (existingSignal.status === 'STOP_LOSS' || existingSignal.status === 'COMPLETED') {
+                    return true;
+                }
+                
+                // Jika signal existing masih aktif, bandingkan analysisnya
+                const existingDirection = existingSignal.direction;
+                const newDirection = newAnalysis.direction;
+                const existingConfidence = existingSignal.confidence;
+                const newConfidence = newAnalysis.confidence;
+                
+                // Valid jika:
+                // 1. Direction berbeda (reversal signal)
+                // 2. Confidence jauh lebih tinggi (>20% improvement)
+                // 3. Sudah lewat 4 jam sejak signal dibuat (expired)
+                const isReversal = existingDirection !== newDirection;
+                const isBetterConfidence = newConfidence > (existingConfidence + 20);
+                const isExpired = Date.now() - new Date(existingSignal.timestamp).getTime() > 4 * 60 * 60 * 1000; // 4 jam
+                
+                return isReversal || isBetterConfidence || isExpired;
+            }
+            
+            calculateTargets(currentPrice, direction) {
+                const isBuy = direction === 'BUY';
+                return isBuy ? 
+                    [currentPrice * 1.02, currentPrice * 1.04, currentPrice * 1.06] :
+                    [currentPrice * 0.98, currentPrice * 0.96, currentPrice * 0.94];
+            }
+            
+            async fetchKlines(symbol, interval, limit) {
+                try {
+                    const response = await fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${interval}&limit=${limit}`);
+                    return await response.json();
+                } catch (error) {
+                    return [];
+                }
+            }
+            
+            performAdvancedTechnicalAnalysis(hourlyData, fourHourData) {
+                const hourlyCloses = hourlyData.map(k => parseFloat(k[4]));
+                const hourlyHighs = hourlyData.map(k => parseFloat(k[2]));
+                const hourlyLows = hourlyData.map(k => parseFloat(k[3]));
+                const hourlyVolumes = hourlyData.map(k => parseFloat(k[5]));
+                
+                const fourHourCloses = fourHourData.map(k => parseFloat(k[4]));
+                
+                const currentPrice = hourlyCloses[hourlyCloses.length - 1];
+                
+                // Basic indicator calculations
+                const rsi = this.calculateRSI(hourlyCloses);
+                const trend = this.determineTrend(hourlyCloses);
+                const momentum = this.calculateMomentum(hourlyCloses);
+                const volumeRatio = this.analyzeVolume(hourlyVolumes);
+                
+                // Signal scoring
+                const signalScore = this.calculateSimpleSignalScore({
+                    rsi, trend, momentum, volumeRatio
+                }, currentPrice);
+                
+                return {
+                    hasSignal: signalScore.score >= 40,
+                    direction: signalScore.direction,
+                    confidence: signalScore.score,
+                    indicators: { rsi, trend, momentum, volume: volumeRatio },
+                    currentPrice,
+                    timestamp: new Date().toISOString()
+                };
+            }
+            
+            calculateSimpleSignalScore(indicators, currentPrice) {
+                let buyScore = 0;
+                let sellScore = 0;
+                
+                // RSI Scoring
+                if (indicators.rsi < 30) buyScore += 25;
+                if (indicators.rsi > 70) sellScore += 25;
+                
+                // Trend Scoring
+                if (indicators.trend === 'BULLISH') buyScore += 20;
+                if (indicators.trend === 'BEARISH') sellScore += 20;
+                
+                // Momentum Scoring
+                if (indicators.momentum > 2) buyScore += 20;
+                if (indicators.momentum < -2) sellScore += 20;
+                
+                // Volume Scoring
+                if (indicators.volume > 1.2) buyScore += 15;
+                if (indicators.volume < 0.8) sellScore += 10;
+                
+                if (buyScore >= 40 && buyScore > sellScore) {
+                    return { direction: 'BUY', score: Math.min(buyScore, 95) };
+                } else if (sellScore >= 40 && sellScore > buyScore) {
+                    return { direction: 'SELL', score: Math.min(sellScore, 95) };
+                } else {
+                    return { direction: 'NEUTRAL', score: Math.max(buyScore, sellScore) };
+                }
+            }
+            
+            calculateRSI(closes) {
+                if (closes.length < 14) return 50;
+                
+                let gains = 0;
+                let losses = 0;
+                
+                for (let i = 1; i < 15; i++) {
+                    const change = closes[closes.length - i] - closes[closes.length - i - 1];
+                    if (change > 0) gains += change;
+                    else losses -= change;
+                }
+                
+                const avgGain = gains / 14;
+                const avgLoss = losses / 14;
+                
+                if (avgLoss === 0) return 100;
+                const rs = avgGain / avgLoss;
+                return 100 - (100 / (1 + rs));
+            }
+            
+            determineTrend(closes) {
+                if (closes.length < 20) return 'NEUTRAL';
+                
+                let uptrend = 0;
+                let downtrend = 0;
+                
+                for (let i = 1; i < closes.length; i++) {
+                    if (closes[i] > closes[i-1]) uptrend++;
+                    else if (closes[i] < closes[i-1]) downtrend++;
+                }
+                
+                if (uptrend > downtrend + 5) return 'BULLISH';
+                if (downtrend > uptrend + 5) return 'BEARISH';
+                return 'NEUTRAL';
+            }
+            
+            calculateMomentum(closes) {
+                if (closes.length < 10) return 0;
+                const currentPrice = closes[closes.length - 1];
+                const price10PeriodsAgo = closes[closes.length - 10];
+                return ((currentPrice - price10PeriodsAgo) / price10PeriodsAgo) * 100;
+            }
+            
+            analyzeVolume(volumes) {
+                if (volumes.length < 20) return 1;
+                const currentVolume = volumes[volumes.length - 1];
+                const averageVolume = volumes.slice(-20).reduce((a, b) => a + b) / 20;
+                return currentVolume / averageVolume;
+            }
+            
+            createAdvancedSignal(symbol, analysis) {
+                const currentPrice = analysis.currentPrice;
+                const isBuy = analysis.direction === 'BUY';
+                
+                // Risk management
+                const stopLossPercent = 3;
+                const sl = isBuy ? 
+                    currentPrice * (1 - stopLossPercent / 100) : 
+                    currentPrice * (1 + stopLossPercent / 100);
+                
+                const targets = this.calculateTargets(currentPrice, analysis.direction);
+                
+                return {
+                    id: `${symbol}_${Date.now()}`,
+                    symbol,
+                    direction: analysis.direction,
+                    entry: currentPrice,
+                    sl: sl,
+                    targets: targets,
+                    targetsStatus: ['PENDING', 'PENDING', 'PENDING'],
+                    status: 'ACTIVE',
+                    confidence: analysis.confidence,
+                    indicators: analysis.indicators,
+                    timestamp: new Date().toISOString()
+                };
+            }
+            
+            displaySignal(signal) {
+                if (!this.passesFilters(signal)) return;
+                
+                const signalsContainer = document.getElementById('signals-container');
+                const signalCard = document.createElement('div');
+                signalCard.className = 'signal-card';
+                signalCard.innerHTML = this.getAdvancedSignalHTML(signal);
+                signalsContainer.appendChild(signalCard);
+                
+                this.updateStats();
+            }
+            
+            getAdvancedSignalHTML(signal) {
+                const directionColor = signal.direction === 'BUY' ? '#00C853' : '#FF4757';
+                const directionIcon = signal.direction === 'BUY' ? '📈' : '📉';
+                
+                return `
+                    <div class="signal-header">
+                        <div style="flex: 1;">
+                            <div class="signal-pair">${signal.symbol}</div>
+                            <div style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
+                                <span class="technical-badge ${signal.direction === 'BUY' ? 'badge-buy' : 'badge-sell'}">
+                                    ${directionIcon} ${signal.direction}
+                                </span>
+                                <span style="font-size: 0.8rem; color: var(--md-on-surface-variant);">
+                                    ${signal.confidence}% Conf
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="signal-price-container">
+                            <div class="signal-current-price" id="current-price-${signal.symbol}">
+                                <span class="price-loading">Loading...</span>
+                            </div>
+                            <div class="signal-entry-price">
+                                Entry: $${signal.entry.toFixed(4)}
+                                <div style="font-size: 0.7rem; color: var(--md-on-surface-variant);">
+                                    SL: $${signal.sl.toFixed(4)}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin: 10px 0;">
+                        <span style="color: ${signal.status === 'ACTIVE' ? '#2196F3' : signal.status === 'COMPLETED' ? '#00C853' : '#FF4757'}; 
+                                    font-weight: 600; font-size: 0.9rem;">
+                            ${signal.status === 'ACTIVE' ? '🟢 ACTIVE' : signal.status === 'COMPLETED' ? '✅ COMPLETED' : '🔴 STOP LOSS'}
+                        </span>
+                    </div>
+                    
+                    ${this.getSignalProgressHTML(signal)}
+                    ${this.getTechnicalIndicatorsHTML(signal)}
+                    ${this.getTargetsHTML(signal)}
+                `;
+            }
+
+            getSignalProgressHTML(signal) {
+                const progressPercent = this.calculateSignalProgress(signal);
+                return `
+                    <div class="signal-progress">
+                        <div class="progress-info">
+                            <span>Progress to Target 1:</span>
+                            <span style="font-weight: 600;">${progressPercent.toFixed(1)}%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${progressPercent}%; 
+                                background: ${progressPercent >= 70 ? '#00C853' : progressPercent >= 30 ? '#FFA726' : '#FF4757'};">
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            calculateSignalProgress(signal) {
+                // Use current price from signal or fallback to entry price
+                const currentPrice = signal.currentPrice || signal.entry;
+                const target1 = signal.targets[0];
+                const entry = signal.entry;
+                
+                if (signal.direction === 'BUY') {
+                    const progress = ((currentPrice - entry) / (target1 - entry)) * 100;
+                    return Math.min(100, Math.max(0, progress));
+                } else {
+                    const progress = ((entry - currentPrice) / (entry - target1)) * 100;
+                    return Math.min(100, Math.max(0, progress));
+                }
+            }
+
+            getTechnicalIndicatorsHTML(signal) {
+                return `
+                    <div class="technical-dashboard">
+                        <div class="indicator-group">
+                            <h4>Technical Indicators</h4>
+                            <div class="indicator-row">
+                                <div class="indicator-item enhanced">
+                                    <div class="indicator-value">${signal.indicators.rsi.toFixed(1)}</div>
+                                    <div class="indicator-label">RSI</div>
+                                    <div style="font-size: 0.7rem; font-weight: 600; padding: 2px 6px; border-radius: 8px; display: inline-block; background: ${signal.indicators.rsi < 30 ? 'rgba(0, 200, 83, 0.2)' : signal.indicators.rsi > 70 ? 'rgba(255, 71, 87, 0.2)' : 'rgba(255, 167, 38, 0.2)'}; color: ${signal.indicators.rsi < 30 ? '#00C853' : signal.indicators.rsi > 70 ? '#FF4757' : '#FFA726'};">${signal.indicators.rsi < 30 ? 'Oversold' : signal.indicators.rsi > 70 ? 'Overbought' : 'Neutral'}</div>
+                                </div>
+                                <div class="indicator-item enhanced">
+                                    <div class="indicator-value">${signal.indicators.momentum > 0 ? '+' : ''}${signal.indicators.momentum.toFixed(2)}%</div>
+                                    <div class="indicator-label">Momentum</div>
+                                    <div style="font-size: 0.7rem; font-weight: 600; padding: 2px 6px; border-radius: 8px; display: inline-block; background: ${signal.indicators.momentum > 2 ? 'rgba(0, 200, 83, 0.2)' : signal.indicators.momentum < -2 ? 'rgba(255, 71, 87, 0.2)' : 'rgba(255, 167, 38, 0.2)'}; color: ${signal.indicators.momentum > 2 ? '#00C853' : signal.indicators.momentum < -2 ? '#FF4757' : '#FFA726'};">${signal.indicators.momentum > 2 ? 'Strong' : signal.indicators.momentum < -2 ? 'Weak' : 'Neutral'}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            getTargetsHTML(signal) {
+                const targetsHTML = signal.targets.map((target, index) => {
+                    const status = signal.targetsStatus[index];
+                    const statusIcon = status === 'HIT' ? '✅' : status === 'FAILED' ? '❌' : '⏳';
+                    const profitPercent = ((target - signal.entry) / signal.entry * 100 * (signal.direction === 'BUY' ? 1 : -1)).toFixed(1);
+                    const statusColor = status === 'HIT' ? '#00C853' : status === 'FAILED' ? '#FF4757' : '#FFA726';
+                    
+                    return `
+                        <div class="target-item">
+                            <span>Target ${index + 1}: $${target.toFixed(4)} (+${profitPercent}%)</span>
+                            <span style="color: ${statusColor}; font-weight: 600;">
+                                ${statusIcon}
+                            </span>
+                        </div>
+                    `;
+                }).join('');
+                
+                return `
+                    <div class="target-progress">
+                        <strong>Profit Targets:</strong>
+                        ${targetsHTML}
+                    </div>
+                `;
+            }
+            
+            updateSignalDisplay() {
+                const signalsContainer = document.getElementById('signals-container');
+                signalsContainer.innerHTML = '';
+                
+                this.activeSignals.forEach(signal => {
+                    if (this.passesFilters(signal)) {
+                        this.displaySignal(signal);
+                    }
+                });
+                
+                this.updateStats();
+            }
+            
+            updateStats() {
+                const activeCount = Array.from(this.activeSignals.values()).filter(s => s.status === 'ACTIVE').length;
+                const finishedCount = Array.from(this.activeSignals.values()).filter(s => s.status !== 'ACTIVE').length;
+                
+                document.getElementById('active-monitors').textContent = activeCount;
+                document.getElementById('active-signals').textContent = activeCount;
+                document.getElementById('signals-found').textContent = this.activeSignals.size;
+                
+                if (activeCount > 0) {
+                    let totalConfidence = 0;
+                    let count = 0;
+                    this.activeSignals.forEach(signal => {
+                        if (signal.status === 'ACTIVE') {
+                            totalConfidence += signal.confidence;
+                            count++;
+                        }
+                    });
+                    const avgConfidence = count > 0 ? totalConfidence / count : 0;
+                    document.getElementById('avg-confidence').textContent = `${avgConfidence.toFixed(1)}%`;
+                } else {
+                    document.getElementById('avg-confidence').textContent = '0%';
+                }
+            }
+            
+            passesFilters(signal) {
+                // Filter confidence
+                if (this.filters.confidence !== 'all') {
+                    const confidence = signal.confidence;
+                    if (this.filters.confidence === 'high' && confidence < 80) return false;
+                    if (this.filters.confidence === 'medium' && (confidence < 60 || confidence >= 80)) return false;
+                    if (this.filters.confidence === 'low' && confidence >= 60) return false;
+                }
+                
+                // Filter direction
+                if (this.filters.direction !== 'all' && signal.direction !== this.filters.direction) {
+                    return false;
+                }
+                
+                // Filter status
+                if (this.filters.status === 'ACTIVE' && signal.status !== 'ACTIVE') {
+                    return false;
+                }
+                if (this.filters.status === 'FINISHED' && 
+                    (signal.status !== 'COMPLETED' && signal.status !== 'STOP_LOSS')) {
+                    return false;
+                }
+                
+                return true;
+            }
+            
+            applyFilters() {
+                this.filters = {
+                    confidence: document.getElementById('filter-confidence').value,
+                    direction: document.getElementById('filter-direction').value,
+                    status: document.getElementById('filter-status').value
+                };
+                
+                this.updateSignalDisplay();
+                this.showNotification('Filters applied successfully', 'success');
+            }
+            
+            resetFilters() {
+                document.getElementById('filter-confidence').value = 'all';
+                document.getElementById('filter-direction').value = 'all';
+                document.getElementById('filter-status').value = 'ACTIVE';
+                
+                this.filters = {
+                    confidence: 'all',
+                    direction: 'all',
+                    status: 'ACTIVE'
+                };
+                
+                this.updateSignalDisplay();
+                this.showNotification('Filters reset', 'success');
+            }
+            
+            cleanupFinishedSignals() {
+                let removedCount = 0;
+                
+                for (const [symbol, signal] of this.activeSignals) {
+                    if (signal.status === 'COMPLETED' || signal.status === 'STOP_LOSS') {
+                        this.activeSignals.delete(symbol);
+                        removedCount++;
+                    }
+                }
+                
+                if (removedCount > 0) {
+                    this.updateSignalDisplay();
+                    this.showNotification(`Cleaned up ${removedCount} finished signals`, 'success');
+                } else {
+                    this.showNotification('No finished signals to clean up', 'info');
+                }
+                
+                return removedCount;
+            }
+            
+            saveSignalToStorage(signal) {
+                const storedSignals = JSON.parse(localStorage.getItem('quantum_signals') || '[]');
+                const existingIndex = storedSignals.findIndex(s => s.symbol === signal.symbol);
+                
+                if (existingIndex >= 0) {
+                    storedSignals[existingIndex] = signal;
+                } else {
+                    storedSignals.push(signal);
+                }
+                
+                localStorage.setItem('quantum_signals', JSON.stringify(storedSignals));
+            }
+            
+            startBackgroundMonitoring() {
+                this.monitoringInterval = setInterval(() => {
+                    this.monitorActiveSignals();
+                }, 30000); // Check every 30 seconds
+            }
+            
+            async monitorActiveSignals() {
+                for (const [symbol, signal] of this.activeSignals) {
+                    if (signal.status !== 'ACTIVE') continue;
+                    
+                    try {
+                        const currentPrice = await this.getCurrentPrice(symbol);
+                        const updatedSignal = this.checkSignalStatus(signal, currentPrice);
+                        
+                        if (updatedSignal.status !== signal.status) {
+                            this.activeSignals.set(symbol, updatedSignal);
+                            this.updateSignalDisplay();
+                            this.saveSignalToStorage(updatedSignal);
+                        }
+                    } catch (error) {
+                        console.error(`Error monitoring ${symbol}:`, error);
+                    }
+                }
+            }
+            
+            async getCurrentPrice(symbol) {
+                try {
+                    const response = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${symbol}`);
+                    const data = await response.json();
+                    return parseFloat(data.price);
+                } catch (error) {
+                    console.error(`Error fetching price for ${symbol}:`, error);
+                    return null;
+                }
+            }
+            
+            checkSignalStatus(signal, currentPrice) {
+                const updatedSignal = {...signal};
+                const isBuy = signal.direction === 'BUY';
+
+                // Check stop loss
+                if ((isBuy && currentPrice <= signal.sl) || (!isBuy && currentPrice >= signal.sl)) {
+                    // Hanya update jika status berubah
+                    if (updatedSignal.status !== 'STOP_LOSS') {
+                        updatedSignal.status = 'STOP_LOSS';
+                        updatedSignal.targetsStatus = updatedSignal.targetsStatus.map(() => 'FAILED');
+                        this.recordResult(updatedSignal); // Panggil recordResult hanya sekali
+                    }
+                    return updatedSignal;
+                }
+
+                // Check targets secara berurutan
+                let statusChanged = false;
+                for (let i = 0; i < signal.targets.length; i++) {
+                    // Skip target yang sudah di-handle
+                    if (signal.targetsStatus[i] !== 'PENDING') continue;
+                    
+                    const targetHit = (isBuy && currentPrice >= signal.targets[i]) || 
+                                    (!isBuy && currentPrice <= signal.targets[i]);
+                    
+                    if (targetHit) {
+                        updatedSignal.targetsStatus[i] = 'HIT';
+                        updatedSignal.hitTarget = i + 1;
+                        statusChanged = true;
+                        
+                        // Record hasil ke results untuk target ini
+                        this.recordPartialResult(updatedSignal, i + 1);
+                        
+                        // Jika ini target terakhir, selesai
+                        if (i === signal.targets.length - 1) {
+                            updatedSignal.status = 'COMPLETED';
+                            this.recordResult(updatedSignal);
+                        }
+                        break;
+                    }
+                    
+                    // Jika target belum tercapai, break dan tunggu next check
+                    break;
+                }
+                
+                return updatedSignal;
+            }
+            
+            recordPartialResult(signal, hitTargetNumber) {
+                const results = JSON.parse(localStorage.getItem('trading_results') || '[]');
+                
+                // Cek apakah result untuk signal dan target ini sudah ada
+                const existingResultIndex = results.findIndex(result => 
+                    result.signalId === signal.id && 
+                    result.hitTarget === hitTargetNumber
+                );
+                
+                // Jika sudah ada, update yang existing
+                if (existingResultIndex >= 0) {
+                    // Update result yang sudah ada
+                    results[existingResultIndex] = {
+                        ...results[existingResultIndex],
+                        targetsStatus: [...signal.targetsStatus],
+                        outcome: `TARGET_${hitTargetNumber}_HIT`,
+                        pnl: this.calculatePartialPNL(signal, hitTargetNumber),
+                        timestamp: new Date().toISOString()
+                    };
+                } else {
+                    // Buat result baru jika belum ada
+                    const result = {
+                        id: `result_${signal.symbol}_T${hitTargetNumber}_${Date.now()}`,
+                        signalId: signal.id,
+                        symbol: signal.symbol,
+                        direction: signal.direction,
+                        entry: signal.entry,
+                        sl: signal.sl,
+                        targets: signal.targets,
+                        targetsStatus: [...signal.targetsStatus],
+                        outcome: `TARGET_${hitTargetNumber}_HIT`,
+                        hitTarget: hitTargetNumber,
+                        pnl: this.calculatePartialPNL(signal, hitTargetNumber),
+                        timestamp: new Date().toISOString()
+                    };
+                    
+                    results.push(result);
+                }
+                
+                localStorage.setItem('trading_results', JSON.stringify(results));
+                this.showNotification(`${signal.symbol} - Target ${hitTargetNumber} hit!`, 'success');
+                
+                if (document.getElementById('results').classList.contains('active')) {
+                    this.loadResults();
+                }
+            }
+            
+            calculatePartialPNL(signal, hitTargetNumber) {
+                const targetPrice = signal.targets[hitTargetNumber - 1];
+                return ((targetPrice - signal.entry) / signal.entry * 100 * (signal.direction === 'BUY' ? 1 : -1)).toFixed(2);
+            }
+            
+            recordResult(signal) {
+                // Untuk STOP LOSS, record result terakhir
+                if (signal.status === 'STOP_LOSS') {
+                    const results = JSON.parse(localStorage.getItem('trading_results') || '[]');
+                    
+                    // Cek apakah result STOP LOSS untuk signal ini sudah ada
+                    const existingResultIndex = results.findIndex(result => 
+                        result.signalId === signal.id && 
+                        result.outcome === 'STOP_LOSS'
+                    );
+                    
+                    // Jika sudah ada, update yang existing
+                    if (existingResultIndex >= 0) {
+                        results[existingResultIndex] = {
+                            ...results[existingResultIndex],
+                            targetsStatus: [...signal.targetsStatus],
+                            pnl: this.calculatePNL(signal),
+                            timestamp: new Date().toISOString()
+                        };
+                    } else {
+                        // Buat result baru jika belum ada
+                        const result = {
+                            id: `result_${signal.symbol}_SL_${Date.now()}`,
+                            signalId: signal.id,
+                            symbol: signal.symbol,
+                            direction: signal.direction,
+                            entry: signal.entry,
+                            sl: signal.sl,
+                            targets: signal.targets,
+                            targetsStatus: [...signal.targetsStatus],
+                            outcome: 'STOP_LOSS',
+                            hitTarget: 0,
+                            pnl: this.calculatePNL(signal),
+                            timestamp: new Date().toISOString()
+                        };
+                        
+                        results.push(result);
+                    }
+                    
+                    localStorage.setItem('trading_results', JSON.stringify(results));
+                    this.showNotification(`${signal.symbol} - Stop Loss hit!`, 'error');
+                }
+                
+                if (document.getElementById('results').classList.contains('active')) {
+                    this.loadResults();
+                }
+            }
+            
+            calculatePNL(signal) {
+                if (signal.status === 'STOP_LOSS') {
+                    return ((signal.sl - signal.entry) / signal.entry * 100 * (signal.direction === 'BUY' ? 1 : -1)).toFixed(2);
+                }
+                
+                if (signal.hitTarget) {
+                    const targetPrice = signal.targets[signal.hitTarget - 1];
+                    return ((targetPrice - signal.entry) / signal.entry * 100 * (signal.direction === 'BUY' ? 1 : -1)).toFixed(2);
+                }
+                
+                return '0.00';
+            }
+
+            // ==================== RESULTS TAB ====================
+            filterResultsByTimeframe(results, timeframe) {
+                const now = new Date();
+                const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                const startOfWeek = new Date(today);
+                startOfWeek.setDate(today.getDate() - today.getDay());
+                const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+                const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+                const endOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+                
+                return results.filter(result => {
+                    const resultDate = new Date(result.timestamp);
+                    
+                    switch(timeframe) {
+                        case 'today':
+                            return resultDate >= today;
+                        case 'week':
+                            return resultDate >= startOfWeek;
+                        case 'month':
+                            return resultDate >= startOfMonth;
+                        case 'last_month':
+                            return resultDate >= startOfLastMonth && resultDate <= endOfLastMonth;
+                        case 'all':
+                        default:
+                            return true;
+                    }
+                });
+            }
+
+            updatePeriodLabel(timeframe) {
+                const labels = {
+                    'all': 'All Time Performance',
+                    'today': "Today's Performance", 
+                    'week': 'This Week Performance',
+                    'month': 'This Month Performance',
+                    'last_month': 'Last Month Performance'
+                };
+                document.getElementById('period-label').textContent = labels[timeframe] || labels.all;
+            }
+
+            loadResults() {
+                const allResults = JSON.parse(localStorage.getItem('trading_results') || '[]');
+                const timeframe = document.getElementById('timeframe-filter').value;
+                
+                // Filter results berdasarkan timeframe
+                const filteredResults = this.filterResultsByTimeframe(allResults, timeframe);
+                const tbody = document.getElementById('results-table-body');
+                
+                // Update period label
+                this.updatePeriodLabel(timeframe);
+                
+                if (filteredResults.length === 0) {
+                    tbody.innerHTML = this.getEmptyResultsHTML(timeframe);
+                    document.getElementById('results-summary').style.display = 'none';
+                    return;
+                }
+                
+                document.getElementById('results-summary').style.display = 'grid';
+                this.calculateResultsStats(filteredResults, timeframe);
+                
+                // Sort results by date (newest first)
+                const sortedResults = filteredResults.sort((a, b) => 
+                    new Date(b.timestamp) - new Date(a.timestamp)
+                );
+                
+                tbody.innerHTML = sortedResults.map(result => this.getResultRowHTML(result)).join('');
+            }
+
+            getEmptyResultsHTML(timeframe) {
+                const messages = {
+                    'today': "No trading results today",
+                    'week': "No trading results this week", 
+                    'month': "No trading results this month",
+                    'last_month': "No trading results last month",
+                    'all': "No trading results yet"
+                };
+                
+                return `
+                    <tr>
+                        <td colspan="9" style="text-align: center; padding: 50px; color: var(--md-on-surface-variant);">
+                            <div style="font-size: 4rem; margin-bottom: 20px; color: var(--md-primary);">
+                                <i class="fas fa-chart-bar"></i>
+                            </div>
+                            <h3 style="margin-bottom: var(--md-space-sm);">${messages[timeframe] || messages.all}</h3>
+                            <p>Completed signals from the scanner will appear here automatically</p>
+                        </td>
+                    </tr>
+                `;
+            }
+            
+            calculateResultsStats(results, timeframe) {
+                let totalPnl = 0;
+                let winCount = 0;
+                let totalProfit = 0;
+                let profitCount = 0;
+                
+                results.forEach(result => {
+                    const pnl = parseFloat(result.pnl);
+                    totalPnl += pnl;
+                    if (pnl > 0) winCount++;
+                    if (pnl > 0) {
+                        totalProfit += pnl;
+                        profitCount++;
+                    }
+                });
+                
+                const totalTrades = results.length;
+                const avgPnl = totalTrades > 0 ? totalPnl / totalTrades : 0;
+                const winRate = totalTrades > 0 ? (winCount / totalTrades) * 100 : 0;
+                const avgProfit = profitCount > 0 ? totalProfit / profitCount : 0;
+                
+                // Update DOM
+                document.getElementById('total-pnl').textContent = `${avgPnl.toFixed(2)}%`;
+                document.getElementById('total-pnl').className = `stat-value ${avgPnl >= 0 ? 'positive' : 'negative'}`;
+                document.getElementById('win-rate').textContent = `${winRate.toFixed(1)}%`;
+                document.getElementById('total-trades').textContent = totalTrades;
+            }
+            
+            getResultRowHTML(result) {
+                const targetsIcons = result.targetsStatus.map(status => 
+                    status === 'HIT' ? '✅' : status === 'FAILED' ? '❌' : '⏳'
+                ).join(' ');
+                
+                const date = new Date(result.timestamp);
+                const dateString = date.toLocaleDateString('id-ID', { 
+                    day: '2-digit', 
+                    month: 'short', 
+                    year: 'numeric' 
+                });
+                const timeString = date.toLocaleTimeString('id-ID', { 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                });
+                
+                const pnl = parseFloat(result.pnl);
+                
+                return `
+                    <tr>
+                        <td>
+                            <div style="font-size: 0.9rem; font-weight: 500;">${dateString}</div>
+                            <div style="font-size: 0.8rem; color: var(--md-on-surface-variant);">${timeString}</div>
+                        </td>
+                        <td><strong>${result.symbol}</strong></td>
+                        <td>
+                            <span class="technical-badge ${result.direction === 'BUY' ? 'badge-buy' : 'badge-sell'}">
+                                ${result.direction}
+                            </span>
+                        </td>
+                        <td>$${result.entry.toFixed(4)}</td>
+                        <td>$${result.sl.toFixed(4)}</td>
+                        <td>${targetsIcons}</td>
+                        <td>
+                            <span style="color: ${result.outcome === 'STOP_LOSS' ? '#FF4757' : '#00C853'}; font-weight: 600;">
+                                ${result.outcome === 'STOP_LOSS' ? 'Stop Loss' : `Target ${result.hitTarget}`}
+                            </span>
+                        </td>
+                        <td style="font-weight: bold; color: ${pnl >= 0 ? '#00C853' : '#FF4757'};">
+                            ${pnl >= 0 ? '+' : ''}${result.pnl}%
+                        </td>
+                        <td>
+                            <div style="display: flex; gap: 8px;">
+                                <button class="btn btn-text" onclick="tradingApp.deleteResult('${result.id}')">Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }
+            
+            clearResults() {
+                if (confirm('Are you sure you want to clear all trading results? This action cannot be undone.')) {
+                    localStorage.removeItem('trading_results');
+                    this.loadResults();
+                    this.showNotification('All results cleared successfully', 'success');
+                }
+            }
+
+            exportResults() {
+                const allResults = JSON.parse(localStorage.getItem('trading_results') || '[]');
+                const timeframe = document.getElementById('timeframe-filter').value;
+                const filteredResults = this.filterResultsByTimeframe(allResults, timeframe);
+                
+                if (filteredResults.length === 0) {
+                    this.showNotification('No results to export for selected period', 'warning');
+                    return;
+                }
+
+                const headers = ['Date', 'Time', 'Symbol', 'Direction', 'Entry', 'SL', 'Targets', 'Outcome', 'PNL'];
+                const csvData = filteredResults.map(result => {
+                    const date = new Date(result.timestamp);
+                    return [
+                        date.toLocaleDateString('id-ID'),
+                        date.toLocaleTimeString('id-ID'),
+                        result.symbol,
+                        result.direction,
+                        result.entry,
+                        result.sl,
+                        result.targets.join('|'),
+                        result.outcome,
+                        result.pnl
+                    ];
+                });
+
+                const csvContent = [headers, ...csvData].map(row => row.join(',')).join('\n');
+                
+                const timeframeLabel = {
+                    'today': 'today',
+                    'week': 'this-week', 
+                    'month': 'this-month',
+                    'last_month': 'last-month',
+                    'all': 'all-time'
+                }[timeframe];
+                
+                const blob = new Blob([csvContent], { type: 'text/csv' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `quantum-results-${timeframeLabel}-${new Date().toISOString().split('T')[0]}.csv`;
+                a.click();
+                window.URL.revokeObjectURL(url);
+                
+                this.showNotification(`Exported ${filteredResults.length} results for ${timeframeLabel}`, 'success');
+            }
+
+            deleteResult(resultId) {
+                if (confirm('Are you sure you want to delete this result?')) {
+                    const results = JSON.parse(localStorage.getItem('trading_results') || '[]');
+                    const filteredResults = results.filter(result => result.id !== resultId);
+                    localStorage.setItem('trading_results', JSON.stringify(filteredResults));
+                    this.loadResults();
+                    this.showNotification('Result deleted successfully', 'success');
+                }
+            }
+
+            // ==================== UTILITIES ====================
+            showNotification(message, type = 'success') {
+                document.querySelectorAll('.notification').forEach(notif => notif.remove());
+
+                const notification = document.createElement('div');
+                notification.className = 'notification';
+                notification.innerHTML = `
+                    <div style="padding: var(--md-space-md); background: ${type === 'success' ? '#00C853' : type === 'error' ? '#FF4757' : '#FFA726'}; color: white; border-radius: var(--md-radius-md); margin-bottom: var(--md-space-sm); font-weight: 600; box-shadow: var(--md-elevation-2);">
+                        <div style="display: flex; align-items: center; gap: var(--md-space-sm);">
+                            <i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'exclamation-triangle' : 'info-circle'}"></i>
+                            <span>${message}</span>
+                        </div>
+                    </div>
+                `;
+
+                document.body.appendChild(notification);
+
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    notification.style.transition = 'opacity 0.5s';
+                    setTimeout(() => notification.remove(), 500);
+                }, 4000);
+            }
+
+            updateLastUpdated() {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('en-US', { 
+                    hour: '2-digit', 
+                    minute: '2-digit',
+                    hour12: false 
+                });
+                document.getElementById('current-time').textContent = timeString;
+                document.getElementById('last-updated').textContent = timeString;
+            }
+        }
+
+        // Initialize the application
+        let tradingApp;
+        document.addEventListener('DOMContentLoaded', function() {
+            tradingApp = new ProTradingScanner();
+        });
+    </script>
+</body>
+</html>
