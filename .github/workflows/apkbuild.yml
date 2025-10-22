@@ -1,9 +1,7 @@
-name: Build Android APK
+name: Build APK - Simple
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
     branches: [ main ]
 
 jobs:
@@ -14,77 +12,43 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       
-    - name: Setup Java 17
-      uses: actions/setup-java@v4
-      with:
-        distribution: 'temurin'
-        java-version: '17'
+    - name: Setup Environment
+      run: |
+        # Setup Java
+        sudo apt update
+        sudo apt install -y openjdk-17-jdk
         
-    - name: Setup Android SDK
-      uses: android-actions/setup-android@v3
-      
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-        cache: 'npm'
+        # Setup Node.js
+        curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+        sudo apt install -y nodejs
         
     - name: Install Cordova
       run: |
         npm install -g cordova@12.0.0
-        cordova --version
         
-    - name: Install project dependencies
-      run: npm install
+    - name: Setup Android SDK
+      run: |
+        # Download Android Command Line Tools
+        wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
+        unzip -q commandlinetools-linux-9477386_latest.zip
+        mkdir -p android-sdk/cmdline-tools/latest
+        mv cmdline-tools/* android-sdk/cmdline-tools/latest/
+        export ANDROID_SDK_ROOT=$PWD/android-sdk
+        export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin
         
-    - name: Add Android platform
+        # Accept licenses dan install packages
+        yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses
+        $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.0"
+        
+    - name: Build APK
       run: |
         cordova platform add android@12.0.0
-        
-    - name: Add Cordova plugins
-      run: |
         cordova plugin add cordova-plugin-file
         cordova plugin add cordova-plugin-local-notification
-        cordova plugin add cordova-plugin-background-mode
-        cordova plugin add cordova-plugin-device
-        cordova plugin add cordova-plugin-network-information
-        
-    - name: Build Android APK
-      run: |
-        cordova build android --debug
-        
-    - name: Upload APK artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: quantum-trader-pro-apk
-        path: platforms/android/app/build/outputs/apk/debug/app-debug.apk
-        retention-days: 30
-        
-    - name: Show build success
-      run: |
-        echo "✅ APK built successfully!"
-        echo "📱 Download from GitHub Actions Artifacts"      run: |
-        # Create fresh Cordova project
-        cordova create build com.quantumtrader.pro "Quantum Trader Pro"
-        cd build
-        
-        # Replace default www content dengan file HTML Anda
-        cp ../index.html www/index.html
-        
-        # Add Android platform
-        cordova platform add android@12.0.0
-        
-        # Add essential plugins
-        cordova plugin add cordova-plugin-file
-        cordova plugin add cordova-plugin-local-notification
-        cordova plugin add cordova-plugin-background-mode
-        
-        # Build APK
         cordova build android --debug
         
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: quantum-trader-pro-apk
-        path: build/platforms/android/app/build/outputs/apk/debug/app-debug.apk
-        retention-days: 30
+        name: quantum-trader-apk
+        path: platforms/android/app/build/outputs/apk/debug/app-debug.apk
